@@ -7,16 +7,30 @@ app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+var mongoose=require('mongoose');
 
-const MongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://qoura:<password>@qoura-zgmdw.mongodb.net/test?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true });
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  
-  client.close();
+const uri = 'mongodb+srv://qoura:qoura@qoura-zgmdw.mongodb.net/test?retryWrites=true&w=majority';
+
+
+mongoose.connect(uri);
+
+mongoose.connection.on('error', (err) => {
+    console.log('DB connection Error');
 });
+
+mongoose.connection.on('connected', (err) => {
+    console.log('DB connected');
+});
+
+var membersSchema = new mongoose.Schema({
+    name: String,
+    email:String,
+    type:String,
+    active:String
+	
+  })
+
+var members =  mongoose.model('members', membersSchema);
 
 
 var passport = require('passport');
@@ -37,10 +51,28 @@ passport.use(new GoogleStrategy({
     callbackURL: "/auth/google/callback"
   },
   function(accessToken, refreshToken, profile, done) {
-  //	console.log(profile)
+  // console.log("profile"+profile)
+  //   members.findOne({email:profile.emails.value}).then((currentUser)=>{
+  //       if(currentUser){
+  //           console.log('User is '+currentUser);
+  //           done(null,currentUser);
+  //       }
+  //       else{
+  //           /*If NOT we create a new User*/
+  //           new members({
+  //               name:profile.displayName,
+  //               email:profile.emails[0].value,
+  //               type:'user',
+  //               active:'1'
+  //               }).save().then((newUser)=>{
+  //                       console.log('new UserCreated'+ newUser);
+  //                       done(null,newUser);
+  //                    })
+  //          }
+  //   })
 
-
-      return done(null,profile);
+  done(null,profile)
+      
   }
 ));
 
