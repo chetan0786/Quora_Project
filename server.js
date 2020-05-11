@@ -197,7 +197,11 @@ app.get('/auth/logout',(req,res)=>
 })
 
 
+app.get('/verify',(req,res)=>
+{
 
+  res.redirect('google98c2703ae6999fe4.html');
+})
 
 
 
