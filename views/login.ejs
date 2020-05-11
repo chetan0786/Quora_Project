@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <title>Storybooks</title>
+</head>
+<body>
+    
+<nav class="grey darken-3">
+  <div class="container">
+    <div class="nav-wrapper">
+      <a href="/stories" class="brand-logo center">StoryBooks</a>
+      <a href="#" data-activates="main-menu" class="button-collapse show-on-large"><i class="fa fa-bars"></i></a>
+      <!-- RIGHT NAV -->
+      <ul class="right hide-on-small-only">
+        
+        <li><a href="/stories"><i class="fa fa-book"></i> Public Stories</a></li>
+        
+      </ul>
+      <!-- SIDE MENU -->
+      <ul class="side-nav" id="main-menu">
+        
+        <% if (user){ %> 
+        <%} else {%>
+        <li>
+          <a class="btn red darken-1" href="/auth/google"><i class="fa fa-google left"></i> Login With Google</a>
+        </li>
+        <% } %>
+        <li><a href="/stories"><i class="fa fa-book"></i> Public Stories</a></li>
+         <% if (user){ %> 
+        <li class="divider"></li>
+        <li><a href="/dashboard"><i class="fa fa-cog"></i> Dashboard</a></li>
+        <li><a href="/stories/my"><i class="fa fa-user"></i> My Stories</a></li>
+        <li><a href="/auth/logout"><i class="fa fa-sign-out"></i> Logout</a></li>
+        <%}%>
+      </ul>
+    </div>
+  </div>
+</nav>
+    
+    
+    
+    
+    <main>
+   <div class = "container">
+    <h1>Welcome</h1>
+<p>Welcome to StoryBooks 1.15.3</p>
+<p>StoryBook is an online writing desk where Stories will be formed, Articles will be written, Ideas will be shared to community.</p>
+<p>So Post stories from the best and worst of your life and choose for them to be read by the world or completley private as your own personal diary</p>
+<a class="btn blue darken-1" href="/auth/google"><i class="fa ga-google left"></i> Login With Google</a>
+   </div>  
+    </main>
+</body>
+    <script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script>
+    $(document).ready(() => {
+      $('.button-collapse').sideNav();
+    });
+  </script>
+</html>

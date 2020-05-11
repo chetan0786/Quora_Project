@@ -2,13 +2,29 @@ var express=require('express')
 var app=express()
 var path=require('path')
 var session=require('express-session')
-const url = require('url');  
+const url = require('url');
+var ejs = require('ejs')
 //pass
 const port = process.env.PORT || 5000;
 app.use(express.static(path.join(__dirname, 'public')));
-app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
+//Bodyparser
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+
+app.set('views', path.join(__dirname, 'Views'));
+app.set('view engine', 'ejs');
+
+
+
+app.get('/login', (req, res) => {
+    res.render('login',{
+        user:null
+    })
+})
+app.get('/', (req, res) => {
+    
+    return res.redirect('/login');
+})
 
 var mongoose=require('mongoose');
 
@@ -53,10 +69,6 @@ app.use(session({secret:"Login"}));
 
 
 
-
-//passportmiddleware
-app.use(passport.initialize());
-app.use(passport.session());
 
 
 passport.use(new GoogleStrategy({
@@ -156,8 +168,6 @@ app.get('/home',function(req,res)
      res.redirect("/");
    }
   }
-
-
 
 
 
