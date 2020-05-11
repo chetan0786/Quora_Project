@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <head>
 	<meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,22 +8,21 @@
     <title>Storybooks</title>
 </head>
 <body>
-    
+	
+	<%- include('partials/header'); -%>
+  <div class="container">
+  <h1> About </h1>
 
-   <%- include('partials/header'); -%>
-    
-    
-    <main>
-   <div class = "container">
-    <h1>Welcome</h1>
-<p>Welcome to StoryBooks 1.15.3</p>
-<p>StoryBook is an online writing desk where Stories will be formed, Articles will be written, Ideas will be shared to community.</p>
-<p>So Post stories from the best and worst of your life and choose for them to be read by the world or completley private as your own personal diary ;)</p>
-<a class="btn blue darken-1" href="/auth/google"><i class="fa ga-google left"></i> Login With Google</a>
-   </div>  
-    </main>
+  <p> Version 1.0.0.0 </p>
+
+  <p> StoryBooks is an App to share your Life Experience </p>
+</div>
+	<%- include('partials/footer'); -%>
+
+
 </body>
-    <script
+
+	 <script
   src="https://code.jquery.com/jquery-3.2.1.js"
   integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
   crossorigin="anonymous">
@@ -35,4 +33,5 @@
       $('.button-collapse').sideNav();
     });
   </script>
-</html>
+
+

@@ -13,6 +13,22 @@ app.use(express.json());
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+var middleFunctionAdmin = function(req, res, next){
+    if(req.session.userType=='admin'&&req.session.isLogin==1){
+      next();
+   } else {
+     res.redirect("/");
+   }
+  }
+
+  var middleFunctionUser = function(req, res, next){
+    if((req.session.userType=="user")&&req.session.isLogin==1){
+      next();
+   } else {
+     res.redirect("/");
+   }
+  }
+
 
 
 
@@ -146,32 +162,39 @@ app.get('/home',function(req,res)
     req.session.isLogin = req.query.isLogin;
     req.session.email = req.query.email ;
     req.session.userType=req.query.userType;
-	res.redirect('home.html');
+    
+	res.render('home',{
+    user:req.query.email
+  });
+
+
 });
 
 
+app.get('/about',middleFunctionUser,(req,res)=>
+{
+  res.render('about',{
+    user:req.session.email
+  });
+})
+
+app.get('/add',middleFunctionUser,(req,res)=>
+{
+  res.render('addstories',{
+    user:req.session.email
+  });
+})
 
 
+ 
 
- var middleFunctionAdmin = function(req, res, next){
-    if(req.session.userType=='admin'&&req.session.isLogin==1){
-      next();
-   } else {
-     res.redirect("/");
-   }
-  }
+app.get('/auth/logout',(req,res)=>
+{
+  req.session.destroy();
+   
 
-  var middleFunctionUser = function(req, res, next){
-    if((req.session.userType=="user")&&req.session.isLogin==1){
-      next();
-   } else {
-     res.redirect("/");
-   }
-  }
-
-
-
-
+  res.redirect('/');
+})
 
 
 
