@@ -1,6 +1,9 @@
 var express=require('express')
 var app=express()
 var path=require('path')
+var session=require('express-session')
+const url = require('url');  
+//pass
 const port = process.env.PORT || 5000;
 app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', function(req, res) {
@@ -24,9 +27,15 @@ mongoose.connection.on('connected', (err) => {
 
 var membersSchema = new mongoose.Schema({
     name: String,
-    email:String,
-    type:String,
-    active:String
+    email:{
+      type:String,
+      required:true
+    },
+    userType:String,
+    active:String,
+    image:{
+        type:String
+        }
 	
   })
 
@@ -38,11 +47,16 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(session({secret:"Login"}));
 
-passport.serializeUser((user,done)=>{
-    done(null,user.id)
-})
 
+
+
+
+
+//passportmiddleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 passport.use(new GoogleStrategy({
@@ -51,46 +65,107 @@ passport.use(new GoogleStrategy({
     callbackURL: "/auth/google/callback"
   },
   function(accessToken, refreshToken, profile, done) {
-  // console.log("profile"+profile)
-  //   members.findOne({email:profile.emails.value}).then((currentUser)=>{
-  //       if(currentUser){
-  //           console.log('User is '+currentUser);
-  //           done(null,currentUser);
-  //       }
-  //       else{
-  //           /*If NOT we create a new User*/
-  //           new members({
-  //               name:profile.displayName,
-  //               email:profile.emails[0].value,
-  //               type:'user',
-  //               active:'1'
-  //               }).save().then((newUser)=>{
-  //                       console.log('new UserCreated'+ newUser);
-  //                       done(null,newUser);
-  //                    })
-  //          }
-  //   })
-
-  done(null,profile)
+   console.log("profile_+__")
+    console.log(profile)
+     members.findOne({email:profile.emails[0].value}).then((currentUser)=>{
+         if(currentUser){
+             console.log('User is '+currentUser);
+             done(null,currentUser);
+         }
+         else{
+             /*If NOT we create a new User*/
+             new members({
+                 name:profile.displayName,
+                 email:profile.emails[0].value,
+                 userType:'user',
+                 active:'1',
+                 image:profile.photos[0].value
+                 }).save().then((newUser)=>{
+                         console.log('new UserCreated'+ newUser);
+                         done(null,newUser);
+                      })
+            }
+     })
       
   }
 ));
 
+
+
+//Error programs .. resolve later....
+passport.serializeUser((user,done)=>{
+    done(null,user.id)
+})
+
+
+passport.deserializeUser((id,done)=>{
+    members.findById(id)
+        .then((user)=>{
+      done(null,user)  
+    })
+    .catch(error => {
+      done(error);
+    });
+})
+
 app.get('/auth/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+  passport.authenticate('google', { scope: [ 'profile',
+      , 'email' ]  }));
+
 
 
 app.get('/auth/google/callback', 
   passport.authenticate('google', { failureRedirect: '/' }),
   function(req, res) {
-    res.redirect('/home');
+    res.redirect(url.format({
+       pathname:"/home",
+       query: {
+          "email": req.user.email,
+          "userType": req.user.userType,
+          "isLogin":1
+        }
+     }));
   });
 
 
 app.get('/home',function(req,res)
 {
+    console.log(req.query);
+    req.session.isLogin = req.query.isLogin;
+    req.session.email = req.query.email ;
+    req.session.userType=req.query.userType;
 	res.redirect('home.html');
 });
+
+
+
+
+
+ var middleFunctionAdmin = function(req, res, next){
+    if(req.session.userType=='admin'&&req.session.isLogin==1){
+      next();
+   } else {
+     res.redirect("/");
+   }
+  }
+
+  var middleFunctionUser = function(req, res, next){
+    if((req.session.userType=="user")&&req.session.isLogin==1){
+      next();
+   } else {
+     res.redirect("/");
+   }
+  }
+
+
+
+
+
+
+
+
+
+
 
 
 
