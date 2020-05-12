@@ -71,7 +71,30 @@ var membersSchema = new mongoose.Schema({
 	
   })
 
+
+var storySchema=new mongoose.Schema({
+  title:String,
+  body:String,
+  status:String,
+  allowComments:Boolean,
+  date:Date,
+  username:String,
+  userid:String,
+  comments:[
+  {
+    commentBody:String,
+    commentUser:String,
+    commentDate:Date
+  }
+
+  ]
+
+
+})
+
 var members =  mongoose.model('members', membersSchema);
+
+var stories =mongoose.model('stories',storySchema);
 
 
 var passport = require('passport');
@@ -150,7 +173,8 @@ app.get('/auth/google/callback',
        query: {
           "email": req.user.email,
           "userType": req.user.userType,
-          "isLogin":1
+          "isLogin":1,
+          "name":req.user.name
         }
      }));
   });
@@ -162,6 +186,7 @@ app.get('/home',function(req,res)
     req.session.isLogin = req.query.isLogin;
     req.session.email = req.query.email ;
     req.session.userType=req.query.userType;
+    req.session.name=req.query.name;
     
 	res.render('home',{
     user:req.query.email
@@ -169,6 +194,42 @@ app.get('/home',function(req,res)
 
 
 });
+
+
+app.post('/addingstory',(req,res)=>
+{
+
+  var allow;
+  if(req.body.allowComments)
+    allow=true;
+  else
+    allow=false;
+
+  const st={
+    title:req.body.title,
+    status:req.body.status,
+    body:req.body.body,
+    date:Date.now(),
+    allowComments:allow,
+    username:req.session.name,
+    userid:req.session.email
+  }
+
+  new stories(st).save()
+  .then(story=>
+  {
+    console.log(story);
+     res.render('home',{
+    user:req.session.email
+  });
+
+  })
+
+
+
+
+ 
+})
 
 
 app.get('/about',middleFunctionUser,(req,res)=>
