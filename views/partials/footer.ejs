@@ -17,11 +17,13 @@
   <div class="footer-copyright">
     <div class="container">
       © 2020 StoryBooks
+      <% if (user) {%>
       <div class="fixed-action-btn">
   <a href="/add" class="btn-floating btn-large red">
     <i class="fa fa-plus"></i>
   </a>
 </div>
+  <%}%>
     </div>
   </div>
 </footer>
