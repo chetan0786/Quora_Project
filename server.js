@@ -3,14 +3,24 @@ var app=express()
 var path=require('path')
 var session=require('express-session')
 const url = require('url');
-var ejs = require('ejs')
+var ejs = require('ejs');
 var moment = require('moment');
+const methodOverride = require('method-override');
+
+
 //pass
 const port = process.env.PORT || 5000;
 app.use(express.static(path.join(__dirname, 'public')));
+
+
 //Bodyparser
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+
+
+//MethodOverride Middleware
+app.use(methodOverride('_method'))
+
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -192,9 +202,8 @@ app.get('/home',function(req,res)
     req.session.userType=req.query.userType;
     req.session.name=req.query.name;
     
-	res.render('home',{
-    user:req.query.email
-  });
+	 return res.redirect('/dashboard');
+  
 
 
 });
@@ -207,6 +216,20 @@ app.get('/home',function(req,res)
 
 
 
+
+// Stories Index my stories
+app.get('/stories/my', (req, res) => {
+  stories.find({userid:req.session.email})
+    .then(story => {
+      
+        res.render('stories/my', {
+         stories: story,
+         user:req.session.email,
+    
+      })
+      
+    });
+});
 
 
 
@@ -248,6 +271,76 @@ app.get('/stories/show/:id', (req, res) => {
 
 
 
+app.get('/dashboard', middleFunctionUser,(req, res) => {
+  stories.find({
+     userid:req.session.email
+  })
+  .then(userStories => {
+    res.render('dashboard', {
+      stories: userStories,
+        user:req.session.email,
+        moment:moment
+    });
+  });
+});
+
+
+
+
+
+
+// Edit Single Story
+app.get('/stories/edit/:id', (req, res) => {
+  stories.findOne({
+    _id: req.params.id
+  })
+  .populate('user')
+  .then(userStory => {
+    res.render('stories/edit', {
+        story: userStory,
+        user:req.session.email,
+        moment:moment
+    });
+  });
+});
+
+
+
+app.put('/stories/:id', (req, res) => {
+  stories.findOne({
+    _id: req.params.id
+  })
+  .then(story => {
+        var allow;
+        if(req.body.allowComments)
+            allow=true;
+        else
+            allow=false;
+      
+      //set new values
+      story.title = req.body.title;
+      story.body = req.body.body;
+      story.status = req.body.status;
+      story.allowComments = allow;
+      
+      
+      story.save().then(story=>{
+          res.redirect('/dashboard')
+      })
+      
+  });
+});
+
+
+
+app.delete('/stories/:id', (req, res) => {
+  stories.remove({
+    _id: req.params.id
+  })
+  .then(()=>{
+          res.redirect('/dashboard')
+      })     
+});
 
 
 

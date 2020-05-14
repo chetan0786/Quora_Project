@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<head>
+	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <title>Storybooks</title>
+</head>
+
+<body>
+     <%- include('./partials/header'); -%>
+    
+    
+    <main>
+   <div class = "container">
+<%
+formatDate= function(date, format){
+    return moment(date).format(format);
+  }
+%>
+
+<h1>Welcome <%= stories[0].author.name %></h1>
+<h4>Your Stories</h4>
+<% if (stories) {%>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%stories.forEach(function(element){%>
+        <tr>
+          <td><a href="/stories/show/<%= element._id %>"><%= element.title %></a></td>
+          <td><%= formatDate(element.date ,'MMMM Do YYYY') %></td>
+          <td><span class="dash-status"><%= element.status %></span></td>
+          <td style="text-align:center">
+            <a class="btn left-align" href="/stories/edit/<%= element._id %>"><i class="fa fa-pencil"></i> Edit</a>
+
+            <form action="/stories/<%= element._id %>?_method=DELETE" method="post" id="delete-form" style="display:inline;">
+                <input type="hidden" name="_method" value="DELETE">
+              <button type="submit" class="btn red"><i class="fa fa-remove"></i> Delete</button>
+            </form>
+          </td>
+        </tr>
+     <%});%>
+    </tbody>
+  </table>
+<%} else{%>
+  <p>You have not created any stories yet</p>
+<%}%>
+        </div>  
+    </main>
+    <%- include('./partials/footer'); -%>
+</body>
+ <script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+<script>
+    
+     $(document).ready(() => {
+      $('.button-collapse').sideNav();
+       $('select').material_select();
+    });
+</script>
+</html>
+
