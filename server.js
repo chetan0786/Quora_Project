@@ -295,7 +295,8 @@ app.get('/dashboard', middleFunctionUser,(req, res) => {
     res.render('dashboard', {
       stories: userStories,
         user:req.session.email,
-        moment:moment
+        moment:moment,
+        username:req.session.name
     });
   });
 });

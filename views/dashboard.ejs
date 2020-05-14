@@ -21,7 +21,10 @@ formatDate= function(date, format){
   }
 %>
 
-<h1>Welcome <%= stories[0].author.name %></h1>
+
+
+       <h1>Welcome <%= username %></h1>
+
 <h4>Your Stories</h4>
 <% if (stories) {%>
   <table class="striped">
@@ -51,9 +54,9 @@ formatDate= function(date, format){
      <%});%>
     </tbody>
   </table>
-<%} else{%>
+<%} else { %>
   <p>You have not created any stories yet</p>
-<%}%>
+<% } %>
         </div>  
     </main>
     <%- include('./partials/footer'); -%>
