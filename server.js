@@ -4,6 +4,7 @@ var path=require('path')
 var session=require('express-session')
 const url = require('url');
 var ejs = require('ejs')
+var moment = require('moment');
 //pass
 const port = process.env.PORT || 5000;
 app.use(express.static(path.join(__dirname, 'public')));
@@ -72,12 +73,15 @@ var membersSchema = new mongoose.Schema({
   })
 
 
+var members =  mongoose.model('members', membersSchema);
+
 var storySchema=new mongoose.Schema({
   title:String,
   body:String,
   status:String,
   allowComments:Boolean,
   date:Date,
+  author:membersSchema,
   username:String,
   userid:String,
   comments:[
@@ -92,7 +96,7 @@ var storySchema=new mongoose.Schema({
 
 })
 
-var members =  mongoose.model('members', membersSchema);
+
 
 var stories =mongoose.model('stories',storySchema);
 
@@ -196,6 +200,63 @@ app.get('/home',function(req,res)
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+// Stories Index
+app.get('/stories', (req, res) => {
+  stories.find({status:'public'})
+    .populate('user')
+    .then(story => {
+      
+        res.render('stories/index', {
+         stories: story,
+         user:req.session.email,
+    
+      })
+      
+    });
+});
+
+
+
+
+// Show Single Story
+app.get('/stories/show/:id', (req, res) => {
+  stories.findOne({
+    _id: req.params.id
+  })
+  .populate('user')
+  .then(userStory => {
+    res.render('stories/show', {
+      story: userStory,
+        user:req.session.email,
+        moment:moment
+    });
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.post('/addingstory',(req,res)=>
 {
 
@@ -204,12 +265,19 @@ app.post('/addingstory',(req,res)=>
     allow=true;
   else
     allow=false;
-
-  const st={
+    
+    
+    
+    members.findOne({email:req.session.email})
+    .then(storyAuthor=>{
+        
+        
+        const st={
     title:req.body.title,
     status:req.body.status,
     body:req.body.body,
     date:Date.now(),
+    author:storyAuthor,
     allowComments:allow,
     username:req.session.name,
     userid:req.session.email
@@ -223,6 +291,10 @@ app.post('/addingstory',(req,res)=>
     user:req.session.email
   });
 
+    })
+    
+
+  
   })
 
 
