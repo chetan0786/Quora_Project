@@ -397,9 +397,7 @@ app.post('/addingstory',(req,res)=>
   .then(story=>
   {
     console.log(story);
-     res.render('home',{
-    user:req.session.email
-  });
+    res.redirect('/dashboard')
 
     })
     
