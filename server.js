@@ -233,6 +233,22 @@ app.get('/stories/my', (req, res) => {
 
 
 
+// Stories Index Specific user
+app.get('/stories/user/:id', (req, res) => {
+  stories.find({userid:req.params.id})
+    .then(story => {
+      
+        res.render('stories/user', {
+         stories: story,
+         user:req.session.email,
+    
+      })
+      
+    });
+});
+
+
+
 
 // Stories Index
 app.get('/stories', (req, res) => {
