@@ -397,6 +397,7 @@ app.post('/addingstory',(req,res)=>
   .then(story=>
   {
     console.log(story);
+    sendNotification(message);
     res.redirect('/dashboard')
 
     })
@@ -448,7 +449,7 @@ app.get('/verify',(req,res)=>
 var sendNotification = function(data) {
   var headers = {
     "Content-Type": "application/json; charset=utf-8",
-    "Authorization": "Basic NGEwMGZmMjItY2NkNy0xMWUzLTk5ZDUtMDAwYzI5NDBlNjJj"
+    "Authorization": "Basic MTlmODQyYjUtYjhhZS00YzI5LTg1MjctZjUzMTUwY2IxYzVk"
   };
   
   var options = {
@@ -478,11 +479,11 @@ var sendNotification = function(data) {
 
 var message = { 
   app_id: "4a426ee2-1255-494f-929c-67bf4ef82e13",
-  contents: {"en": "English Message"},
+  contents: {"en": "Hey New Story is Added. Check Fast.."},
   included_segments: ["All"]
 };
 
-sendNotification(message);
+
 
 
 
