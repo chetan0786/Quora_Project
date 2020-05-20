@@ -33,8 +33,28 @@ formatDate= function(date, format){
         %>
       </div>
     </div>
+
+        <!--  <% if(story.allowComments) { %>
+          <div class="card">
+        <div class="card-content">
+          <span class="card-title">Comments</span>
+            <% if(user) { %>
+            <form method="post" action="/stories/comment/{{story.id}}">
+              <div class="input-field">
+                <textarea name="commentBody" class="materialize-textarea"></textarea>
+                <label> Add Comment</label>
+              </div>
+              <input type="submit" value="Submit" class="btn">
+            </form>
+            <% } %>
+            
+
+         <% }  %> -->
+
   </div>
-  <div class="col s12 m3">
+   </div>  
+
+  <div class="col s12 m4">
     <div class="card center-align">
       <div class="card-content">
         <span class="card-title"><%= story.username%></span>
@@ -46,7 +66,11 @@ formatDate= function(date, format){
     </div>
   </div>
 </div>
-         </div>  
+        
+
+       
+
+
     </main>
     <%- include('./../partials/footer'); -%>
 </body>
