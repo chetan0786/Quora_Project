@@ -428,6 +428,13 @@ app.get('/add',middleFunctionUser,(req,res)=>
 })
 
 
+app.get('/news',middleFunctionUser,(req,res)=>
+{
+	res.render('news',{
+		user:req.session.email
+	});
+})
+
  
 
 app.get('/auth/logout',(req,res)=>
