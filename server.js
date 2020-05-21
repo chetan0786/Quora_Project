@@ -479,7 +479,7 @@ var sendNotification = function(data) {
 
 var message = { 
   app_id: "4a426ee2-1255-494f-929c-67bf4ef82e13",
-  contents: {"en": "Hey New Story is Added. Check Fast.."},
+  contents: {"en": "Hey! New Story is Added. Check Fast.."},
   included_segments: ["All"]
 };
 
