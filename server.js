@@ -97,7 +97,7 @@ var storySchema=new mongoose.Schema({
   comments:[
   {
     commentBody:String,
-    commentUser:String,
+    commentUser:membersSchema,
     commentDate:Date
   }
 
@@ -246,6 +246,34 @@ app.get('/stories/user/:id', (req, res) => {
       
     });
 });
+
+app.post('/stories/comment/:id',(req,res)=>
+{
+	console.log(req.params.id);
+	
+	members.find({email:req.session.email})
+	.then(data=>{
+		//console.log(data);
+	
+		stories.findOneAndUpdate(
+	{
+		_id: req.params.id
+	},
+	{
+		$push :{comments:{
+		commentBody:req.body.commentBody,
+		commentUser:data[0],
+		commentDate:Date.now()
+	}}
+	})
+	.then((data)=>
+	{
+		console.log(data);
+		res.redirect('/stories/show/'+req.params.id);
+	})
+	})
+	
+})
 
 
 
