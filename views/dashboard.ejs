@@ -34,7 +34,7 @@ formatDate= function(date, format){
 
        <h1>Welcome <%= username %></h1>
 
-<h4>Your Stories</h4>
+<h4>Work Index</h4>
 <% if (stories) {%>
   <table class="striped">
     <thead>
@@ -52,11 +52,12 @@ formatDate= function(date, format){
           <td><%= formatDate(element.date ,'MMMM Do YYYY') %></td>
           <td><span class="dash-status"><%= element.status %></span></td>
           <td style="text-align:center">
-            <a class="btn left-align" href="/stories/edit/<%= element._id %>"><i class="fa fa-pencil"></i> Edit</a>
+            <a class="btn left-align" href="/stories/edit/<%= element._id %>"><i class="fa fa-pencil"></i> </a>
 
+              <a class="btn orange left-align" href="/stories/edit/<%= element._id %>"><i class="fa fa-envelope"></i> </a>
             <form action="/stories/<%= element._id %>?_method=DELETE" method="post" id="delete-form" style="display:inline;">
                 <input type="hidden" name="_method" value="DELETE">
-              <button type="submit" class="btn red"><i class="fa fa-remove"></i> Delete</button>
+              <button type="submit" class="btn red"><i class="fa fa-trash"></i> </button>
             </form>
           </td>
         </tr>

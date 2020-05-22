@@ -1,12 +1,12 @@
-<nav class="grey darken-3">
+<nav class="grey darken-4" style="height:80px;">
   <div class="container">
     <div class="nav-wrapper">
-      <a href="/stories" class="brand-logo center">StoryBooks</a>
-      <a href="#" data-activates="main-menu" class="button-collapse show-on-large"><i class="fa fa-bars"></i></a>
+      <a href="/dashboard" class="brand-logo center">StoryBooks</a>
+      <a href="#" data-activates="main-menu" class="button-collapse show-on-large"><i style="font-size:24px" class="fa fa-lg fa-bars"></i></a>
       <!-- RIGHT NAV -->
       <ul class="right hide-on-small-only">
         
-        <li><a href="/stories"><i class="fa fa-book"></i> Public Stories</a></li>
+        <li><a href="/stories"><i style="font-size:24px" class="fa fa-lg fa-book"></i></a></li>
         
       </ul>
       <!-- SIDE MENU -->
@@ -15,17 +15,24 @@
         <% if (user){ %> 
         <%} else {%>
         <li>
-          <a class="btn red darken-1" href="/auth/google"><i class="fa fa-google left"></i> Login With Google</a>
+          <a class="btn red darken-1" href="/auth/google"><i style="font-size:24px" class="fa fa-google left"></i> Login With Google</a>
         </li>
         <% } %>
-        <li><a href="/stories"><i class="fa fa-lg fa-book"></i> Public Stories</a></li>
+        <li><a href="/stories"><i style="font-size:24px" class="fa fa-lg fa-book"></i> Public Stories</a></li>
          <% if (user){ %> 
         <li class="divider"></li>
-        <li><a href="/dashboard"><i class="fa fa-lg fa-cog"></i> Dashboard</a></li>
-        <li><a href="/stories/my"><i class="fa fa-lg fa-user"></i> My Stories</a></li>
-        <li><a href="/add"><i class="fa fa-lg fa-plus-square"></i> Add Stories</a></li>
-        <li><a href="/news"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Latest News</a></li>
-        <li><a href="/auth/logout"><i class="fa fa-lg fa-sign-out"></i> Logout</a></li>
+        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-home" ></i> Home</a></li>
+        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-table"></i> Dashboard</a></li>
+        <li><a href="/stories/my"><i style="font-size:24px" class="fa fa-lg fa-user"></i> My Stories</a></li>
+        <li><a href="/add"><i style="font-size:24px" class="fa fa-lg fa-plus-square"></i> Add Stories</a></li>
+        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-compass"></i> Explore</a></li>
+        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-envelope"></i> Mail Writer</a></li>
+        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-search"></i> Find Hub</a></li>
+        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-globe"></i> Global Index</a></li>
+        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-rocket"></i> Activity</a></li>
+        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-cog"></i> Settings</a></li>  
+        <li><a href="/news"><i style="font-size:24px" class="fa fa-lg fa-newspaper-o" ></i> Latest News</a></li>
+        <li><a href="/auth/logout"><i style="font-size:24px" class="fa fa-lg fa-sign-out"></i> Logout</a></li>
         <%}%>
       </ul>
     </div>
