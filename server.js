@@ -224,7 +224,7 @@ app.get('/stories/my', (req, res) => {
       
         res.render('stories/my', {
          stories: story,
-         user:req.session.email,
+         user:req.session.name,
     
       })
       
@@ -240,7 +240,7 @@ app.get('/stories/user/:id', (req, res) => {
       
         res.render('stories/user', {
          stories: story,
-         user:req.session.email,
+         user:req.session.name,
     
       })
       
@@ -286,7 +286,7 @@ app.get('/stories', (req, res) => {
       
         res.render('stories/index', {
          stories: story,
-         user:req.session.email,
+         user:req.session.name,
     
       })
       
@@ -305,7 +305,7 @@ app.get('/stories/show/:id', (req, res) => {
   .then(userStory => {
     res.render('stories/show', {
       story: userStory,
-        user:req.session.email,
+        user:req.session.name,
         moment:moment
     });
   });
@@ -322,7 +322,7 @@ app.get('/dashboard', middleFunctionUser,(req, res) => {
   .then(userStories => {
     res.render('dashboard', {
       stories: userStories,
-        user:req.session.email,
+        user:req.session.name,
         moment:moment,
         username:req.session.name
     });
@@ -343,7 +343,7 @@ app.get('/stories/edit/:id', (req, res) => {
   .then(userStory => {
     res.render('stories/edit', {
         story: userStory,
-        user:req.session.email,
+        user:req.session.name,
         moment:moment
     });
   });
@@ -441,17 +441,17 @@ app.post('/addingstory',(req,res)=>
 })
 
 
-app.get('/about',middleFunctionUser,(req,res)=>
+app.get('/about',(req,res)=>
 {
   res.render('about',{
-    user:req.session.email
+    user:req.session.name
   });
 })
 
 app.get('/add',middleFunctionUser,(req,res)=>
 {
   res.render('addstories',{
-    user:req.session.email
+    user:req.session.name
   });
 })
 
@@ -459,7 +459,7 @@ app.get('/add',middleFunctionUser,(req,res)=>
 app.get('/news',middleFunctionUser,(req,res)=>
 {
 	res.render('news',{
-		user:req.session.email
+		user:req.session.name
 	});
 })
 

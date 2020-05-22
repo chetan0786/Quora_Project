@@ -51,7 +51,7 @@ formatDate= function(date, format){
     </div>
   </div>
 </div>
-       
+       <% if(user) { %>
        <div class="row">
   <div class="col s12 m8">
         
@@ -122,7 +122,7 @@ formatDate= function(date, format){
         </style>
   
           
-            <% if(user) { %>
+            
             <div class="rating">
           
            
@@ -164,13 +164,13 @@ formatDate= function(date, format){
                 
             </div>
              
-            <%}%>
+            
           
     
     </div>
            </div>
        </div>
-        
+        <%}%>
     
        
        
@@ -191,7 +191,7 @@ formatDate= function(date, format){
             <% if(user) { %>
             <form method="post" action="/stories/comment/<%= story._id%>">
               <div class="input-field">
-                <textarea name="commentBody" class="materialize-textarea"></textarea>
+                <textarea name="commentBody" class="materialize-textarea" required></textarea>
                 <label> Add Comment</label>
               </div>
               <input type="submit" value="Submit" class="btn">
