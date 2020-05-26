@@ -10,25 +10,19 @@
 </head>
 
 <body style="background:#eee">
-     <%- include('./../partials/header'); -%>
-    
+    <%- include('partials/headerForSearch'); -%>
     
     <main>
    <div class = "container">
-<h3>My Stories</h3>
-       <%- include ('./functions') -%> 
-<div class="row">
+       
+<h3>Search stories</h3>
+       <%- include ('./stories/functions') -%> 
+<div class="row storyContent">
     <%stories.forEach(function(element){%>
     
     <div class="col s12 m4">
       <div class="card">
-          <%if(element.userid == useremail ){%>
-        <div class="card-image">
-          <a href="/stories/edit/<%=element._id%>" class="btn-floating halfway-fab red">
-            <i class="fa fa-pencil"></i>
-          </a>
-        </div>
-          <%}%>
+          
         <div class="card-content center-align">
           <h5><%=element.title%></h5>
 <!--          <div class="story-text" style="height:120px;"><% (truncate(element.body,150)) %></div>-->
@@ -51,7 +45,7 @@
     
       </div>  
     </main>
-    <%- include('./../partials/footerForStories') -%>
+    <%- include('partials/footerForStories') -%>
 </body>
  <script
   src="https://code.jquery.com/jquery-3.2.1.js"
@@ -68,6 +62,27 @@
     });
     
 
+function loadByAjax()
+{
+     $('.storyContent').html('')
+     $.ajax({
+          type: "POST",
+          url: "/searchQuery",
+          data:  { search: document.getElementById('searchbar').value },
+          success: function(response_data){
+              var data_str = JSON.stringify(response_data);
+              var ele = JSON.parse(data_str)
+              for (element of ele){
+          $('.storyContent').append(
+         '<div class="col s12 m4"><div class="card"><div class="card-content center-align"><h5>'+element.title+'</h5><br><div class="chip"><img src="'+element.author.image+'">'+element.username+'</div></div><div class="card-action center-align"><a class="btn grey" href="/stories/show/'+element._id+'">Read More</a></div></div></div>')
+              }
+          }
+          });
+}
+    
+    
+   
+    
 </script>
 </html>
 

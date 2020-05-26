@@ -20,7 +20,7 @@
 
 <body style="background:#fff">
      <%- include('./partials/header'); -%>
-    
+     
     
     <main>
    <div class = "container">
@@ -35,6 +35,64 @@ formatDate= function(date, format){
 <!--       <h1>Welcome <%= username %></h1>-->
 
 <h4>Work Index</h4>
+       
+       <style>
+       
+           .modal-bg1 {
+               position:fixed;
+               top:0;
+               left:0;
+               width:100%;
+               height:100vh;
+               background-color:rgba(0,0,0,0.5);
+               display:flex;
+               justify-content:center;
+               align-items:center;
+               visibility:hidden;
+               opacity:0;
+               transition: visibility 0s opacity 0.5s;
+           }
+           
+           .bg-active{
+               visibility:visible;
+               opacity:1;
+           }
+           
+           .modal1{
+               padding:20px;
+               position:relative;
+               background-color:white;
+               width:300px;
+               display:flex;
+               justify-content:space-around;
+               align-items:center;
+               flex-direction:column;
+           }
+       
+           .modal-close1{
+               position:absolute;
+               top:10px;
+               right:10px;
+               cursor:pointer;
+               font-weight:bold;
+           }
+           
+           .modal1 h4{
+               font-size:25px;
+           }
+           .modal1 label{
+               font-size:1rem;
+           }
+           .modal1 input{
+               background-color:antiquewhite;
+           }
+       </style>
+       
+       
+       
+     
+       
+       
 <% if (stories) {%>
   <table class="striped" >
     <thead>
@@ -48,27 +106,73 @@ formatDate= function(date, format){
     <tbody>
       <%stories.forEach(function(element){%>
         <tr>
+          
           <td><a href="/stories/show/<%= element._id %>"><%= element.title %></a></td>
           <td><%= formatDate(element.date ,'MMMM Do YYYY') %></td>
           <td><span class="dash-status"><%= element.status %></span></td>
           <td style="text-align:center;margin:10px">
             <a class="btn left-align" href="/stories/edit/<%= element._id %>"><i class="fa fa-pencil"></i> </a>
 
-              <a class="btn orange left-align" style="margin:10px;" href="/stories/edit/<%= element._id %>"><i class="fa fa-envelope"></i> </a>
+              <a class="btn orange mail-btn left-align" style="margin:10px;" ><i class="fa fa-envelope"></i> </a>
             <form action="/stories/<%= element._id %>?_method=DELETE" method="post" id="delete-form" style="display:inline;">
                 <input type="hidden" name="_method" value="DELETE">
               <button type="submit" class="btn red"><i class="fa fa-trash"></i> </button>
             </form>
+              
+               <div class="modal-bg1">
+          
+                <div class="modal1 ">
+                    <form action="/mail/<%= element._id%>?_method=PUT" method="post" class="col s12">
+                        <input type="hidden" name="_method" value="PUT">
+           <h4>Mail <%=element.title%></h4>
+            <label for="email">Email To:</label>
+           <input type="email" id="toemail" name ="email" required>
+              <label for="name">Subject :</label>
+           <input type="text" id="subject" name="subject" required>
+                        <button type="submit" class="btn orange" value="mail">Mail</button>
+           <input type="text" name="story" value="<%=element.body%>" hidden>
+                        
+           <span class="modal-close1">X</span>
+                        </form>
+           </div>
+
+       </div>
+              
           </td>
+           
         </tr>
+        
+          
+       
+        
+        
      <%});%>
     </tbody>
   </table>
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+      
+       
+       
+       
+       
+       
 <%} else { %>
   <p>You have not created any stories yet</p>
 <% } %>
-        </div>  
+        </div>
+        
     </main>
+    
+    
     <%- include('./partials/footerForStories'); -%>
 </body>
  <script
@@ -84,6 +188,39 @@ formatDate= function(date, format){
       $('.button-collapse').sideNav();
        $('select').material_select();
     });
+    
+    
+           var modalBtn = document.querySelector('.mail-btn');
+           var modalClose =  document.querySelector('.modal-close1');
+           
+    var userdata2;
+           modalClose
+    
+    
+      $(document).on('click','.mail-btn',function(){
+          
+          var d=$(this).parent()[0].children[3];
+         
+          doit(d);
+          d.children[0].children[0].children[8].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+           });
+          
+      });
+    
+    
+    
+    function doit(mm){
+
+               mm.classList.add('bg-active');
+        
+           }
+    
+    function displayStory(){
+       var subject = document.getElementById('subject');
+        var mail = document.getElementById('toemail');
+        alert(mail);
+    }
 </script>
 </html>
 

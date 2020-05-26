@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <title>Storybooks</title>
+    <style>
+    /* label focus color */
+ .input-field input:focus + label {
+   color: orange !important;
+ }
+ /* label underline focus color */
+ .row .input-field input:focus {
+   border-bottom: 1px solid orange !important;
+   box-shadow: 0 1px 0 0 red !important
+ }
+    </style>
+</head>
+<body>
+	
+	<%- include('partials/header'); -%>
+
+    
+    
+    
+             <div class="row " style="">
+            <div class="col s0 m2"></div>
+  <div class="col s12 m8">
+    <div class="card ">
+      <div class="card-content center" style="padding : 5px;">
+      
+      <h4>Mail Writer</h4>
+    
+  </div>
+   </div>
+            </div>
+            <div class="col s0 m2  ">
+            </div>
+</div>
+           
+
+    
+    
+    
+    
+    
+    
+    
+          <div class="row " style="">
+            <div class="col s0 m2"></div>
+  <div class="col s12 m8">
+    
+      <div class=" ">
+      <div>
+     <form action="/sendingfanmail" method="post" class="col s12">
+    <div class="row">
+      <div class="input-field ">
+        <input type="text" name="title"  required>
+        <label for="title">Title</label>
+      </div>
+    </div>
+         
+         
+         
+         
+            <div class="row">
+      <div class="input-field">
+        <select name="writer" required>
+          
+             <%author.forEach(function(element){%>
+    
+                    <option value="<%= element.email%>"><%= element.name%></option>
+            <%});%>
+          
+        </select>
+        <label for="writer">To Writer : </label>
+      </div>
+    </div>
+
+
+ <div class="row">
+      <div class="input-field">
+        <h5>Write your fan mail:</h5>
+        <textarea name="body" required></textarea>
+      </div>
+    </div>
+   
+         
+          <input type="submit" value="send" class="btn orange">
+         
+         
+  </form>
+        
+    
+  </div>
+   </div>
+            </div>
+            <div class="col s0 m2  ">
+            </div>
+</div>
+    
+    <%- include('partials/footerForStories'); -%>
+
+
+</body>
+<script src="//cdn.ckeditor.com/4.14.0/full/ckeditor.js"></script>
+	 <script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script>
+    $(document).ready(() => {
+      $('.button-collapse').sideNav();
+               $('select').material_select();
+        
+    });
+      CKEDITOR.replace( 'body', {
+	toolbar: [
+		{ name: 'document', items: [ 'Source', '-', 'NewPage', 'Preview', '-', 'Templates' ] },	// Defines toolbar group with name (used to create voice label) and items in 3 subgroups.
+		[ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ],			// Defines toolbar group without name.
+		'/',																					// Line break - next group will be placed in new line.
+		{ name: 'basicstyles', items: [ 'Bold', 'Italic' ] }
+	]
+});
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+  </script>
+
+
+

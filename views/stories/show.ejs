@@ -51,6 +51,56 @@ formatDate= function(date, format){
     </div>
   </div>
 </div>
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+  
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+<!--
+       //this empty row is for space + disturbing this will left script to be changes
+          <div class="row"> </div>
+-->
+       
+       
+       
+       
+       
+       
        <% if(user) { %>
        <div class="row">
   <div class="col s12 m8">
@@ -123,14 +173,13 @@ formatDate= function(date, format){
   
           
             
-            <div class="rating">
+            <div class="rating" style="height:30px;">
           
            
                 
                 <input type=radio name="star" id = "star5">
                 <label for="star5">
                     <img  src="/smiley/1.png">
-                    <h4>WORST</h4>
                 </label>
                 
                 
@@ -138,7 +187,6 @@ formatDate= function(date, format){
                 <input style="display:none;"type=radio name="star" id = "star4">
                 <label for="star4">
                     <img src="/smiley/2.png">
-                    <h4>BAD</h4>
                 </label>
                 
                  
@@ -146,38 +194,59 @@ formatDate= function(date, format){
                 <input type=radio name="star" id = "star3" >
                 <label for="star3">
                     <img src="/smiley/3.png">
-                    <h4>GOOD</h4>
                 </label>
                 
                  <input type=radio name="star" id = "star2">
                 <label for="star2">
                     <img src="/smiley/4.png">
-                    <h4>LIKED</h4>
                 </label>
                
                   <input type=radio name="star" id = "star1">
                 <label for="star1">
                     <img src="/smiley/5.png">
-                    <h4>LOVED</h4>
                 </label>
                 
                 
             </div>
-             
+          
             
           
     
+        
     </div>
+      
+      
+      
+      <div class="left " id="totalLikes" style="align-items:right">
+         <button class="btn  white" id="_likedStories"style="color:black;font-style:bold;"><i style="font-size:24px;color:red;" class="fa fa-lg fa-heart"></i> <%= story.likedBy.length%></button>
+         
+        </div>
+      
+      
+      
+         <div class="right" style="align-items:right">
+         <button class="btn  grey" id="_likeBtn" onclick="likeProcess()"style=""><i style="font-size:24px" class="fa fa-lg fa-heart"></i></button>
+         <button class="btn  blue" id="_shareBtn"style=""><i style="font-size:24px" class="fa fa-lg fa-send"></i></button>
+        </div>
            </div>
        </div>
+       
+        
+      
+    
+       
+       
         <%}%>
+    
+       
+       
     
        
        
   <% if(story.allowComments) { %>
   <div class="row">
   <div class="col s12 m8">
-          <div class="card">
+          <div class="card story">
         <div class="card-content">
             
             
@@ -222,9 +291,145 @@ formatDate= function(date, format){
       <% }) %>
 </div>
 </div>
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+            
+       <div class="modal-bg2">
+          
+                <div class="modal2 ">
+                    
+                        
+           <h5>People who liked it</h5>
+                    <ul>
+                   <%story.likedBy.forEach(function(element){%>
+                       <li><%= element%></li>
+                    <%});%>
+                        
+                        
+                        
+           </ul>
+                        <button type="submit" class="btn red" value="mail">Close</button>
+           <input type="text" name="story" value="<%=story.body%>" hidden>
+                        
+           
+                        
+           </div>
 
+       </div>
+       
+       
+          
+       <div class="modal-bg1">
+          
+                <div class="modal1 ">
+                    <form action="/mail/<%= story._id%>?_method=PUT" method="post" class="col s12">
+                        <input type="hidden" name="_method" value="PUT">
+           <h4>Mail <%=story.title%></h4>
+            <label for="email">Share To:</label>
+           <input type="email" id="toemail" name ="email" required>
+              <label for="name">Subject :</label>
+           <input type="text" id="subject" name="subject" required>
+                        <button type="submit" class="btn orange" value="mail">Mail</button>
+           <input type="text" name="story" value="<%=story.body%>" hidden>
+                        
+           <span class="modal-close1">X</span>
+                        </form>
+           </div>
+
+       </div>
+       
+       
+        </div>
+        
     </main>
     <%- include('./../partials/footerForStories'); -%>
+     <style>
+       
+         
+         .modal-bg2 {
+               position:fixed;
+               top:0;
+               left:0;
+               width:100%;
+               height:100vh;
+               background-color:rgba(0,0,0,0.5);
+               
+               display:flex;
+               justify-content:center;
+               align-items:center;
+               visibility:hidden;
+               opacity:0;
+               transition: visibility 0s opacity 0.5s;
+           }
+           .modal-bg1 {
+               position:fixed;
+               top:0;
+               left:0;
+               width:100%;
+               height:100vh;
+               background-color:rgba(0,0,0,0.5);
+               
+               display:flex;
+               justify-content:center;
+               align-items:center;
+               visibility:hidden;
+               opacity:0;
+               transition: visibility 0s opacity 0.5s;
+           }
+           
+           .bg-active{
+               visibility:visible;
+               opacity:1;
+           }
+         
+           .modal2{
+               padding:20px;
+               position:relative;
+               background-color:white;
+               width:300px;
+               display:flex;
+               justify-content:space-around;
+               align-items:center;
+               flex-direction:column;
+           }
+         
+           .modal1{
+               padding:20px;
+               position:relative;
+               background-color:white;
+               width:300px;
+               display:flex;
+               justify-content:space-around;
+               align-items:center;
+               flex-direction:column;
+           }
+       
+           .modal-close1{
+               position:absolute;
+               top:10px;
+               right:10px;
+               cursor:pointer;
+               font-weight:bold;
+           }
+           
+           .modal1 h4{
+               font-size:25px;
+           }
+           .modal1 label{
+               font-size:1rem;
+           }
+           .modal1 input{
+               background-color:antiquewhite;
+           }
+       </style>
 </body>
  <script
   src="https://code.jquery.com/jquery-3.2.1.js"
@@ -238,7 +443,79 @@ formatDate= function(date, format){
      $(document).ready(() => {
       $('.button-collapse').sideNav();
        $('select').material_select();
+         
+         
+         <%if( story.likedBy.includes(useremail)){%>
+         document.getElementById('_likeBtn').classList.replace('grey','pink')
+         <%}%>
     });
+    
+    function likeProcess(){
+        
+        if(document.getElementById('_likeBtn').classList.contains('grey'))
+            document.getElementById('_likeBtn').classList.replace('grey','pink')
+       else if(document.getElementById('_likeBtn').classList.contains('pink'))
+            document.getElementById('_likeBtn').classList.replace('pink','grey')
+        
+        
+         $.ajax({
+          type: "POST",
+          url: "/likeStory",
+          data:  { like: document.getElementById('_likeBtn').classList.contains('pink'),
+                   storyId: "<%= story._id%>"
+                 },
+          success: function(response_data){
+              
+          $('#totalLikes').html('<button class="btn  white" id="_likedStories"style="color:black;font-style:bold;"><i style="font-size:24px;color:red;" class="fa fa-lg fa-heart"></i> '+response_data+'</button>')
+              }
+          }
+          );
+        
+        
+    }
+    
+    
+    
+
+    
+      $(document).on('click','#_likedStories',function(){
+          
+          var d=$(this).parent().parent().parent().parent()[0].children[4];
+           console.log(d.children[0].children[0])
+          doit(d);
+          d.children[0].children[2].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+           });
+          
+      });
+    
+    
+    
+    
+    
+    
+    
+    
+      $(document).on('click','#_shareBtn',function(){
+          
+          var d=$(this).parent().parent().parent().parent()[0].children[5];
+           console.log($(this).parent().parent().parent().parent()[0].children[5])
+          doit(d);
+          d.children[0].children[0].children[8].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+           });
+          
+      });
+    
+    
+    
+    function doit(mm){
+
+               mm.classList.add('bg-active');
+        
+           }
+
+    
 </script>
 </html>
 

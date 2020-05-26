@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <title>Storybooks</title>
+</head>
+<body>
+	
+	<%- include('partials/header'); -%>
+
+    
+       <div class = "container">
+        <div class="row">
+            <div class="col s0 m1"></div>
+  <div class="col s12 m10">
+    <div class="card ">
+      <div class="card-content ">
+      
+     
+      <div class="row">
+          
+     <div class="col s12 m12">
+         
+          
+        <span class="card-title " id="name_image" style="background-color: aliceblue;text-align:center;padding:20px;"><img src="<%= userDetails.image%>" style="height: 100px;" class="circle responsive-img"><br><%= userDetails.name%></span>
+              
+         </div>
+          </div>
+          <div class="row">
+          <div class="col s6 m6 "  id="_followers"style="height:100%;border:1px solid black;text-align:center;font-weight:bold;cursor:pointer;">
+          FOLLOWERS: <%= userDetails.followers.length%>
+          </div>
+          <div class="col s6 m6 " id="_following"style="height:100%;border:1px solid black;text-align:center;font-weight:bold;cursor:pointer;">
+          FOLLOWING: <%= userDetails.following.length%>
+          </div>
+      
+          
+          </div>
+          
+          <hr>
+          
+          <div class="row">
+               
+          <div class="col s12 m6" style="height:100%;text-align:left">
+              <div ><i class="fa fa-lg fa-envelope"></i> <%= userDetails.email%></div>
+              <div ><i class="fa fa-lg fa-edit"></i> Writer</div>
+          </div>
+          <div class="col s12 m6" style="height:100%;text-align:left">
+              <div style="display:inline-block;font-weight:bold;" >About: </div>
+              
+          <div class=""> <input class="editAbout" style="width:70%;display: inline-block;
+display:none;
+    height: 34px;
+    padding-left:10px
+              padding-right:10px
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;" class=""type="text" value="Hey there, Im a  Desk. " >
+              
+              
+              <div style="display:inline-block;" class="displayAbout" id="_displayAbout"> 
+                  
+                 <%= userDetails.about%>
+              
+              </div>
+              <buttton class="editAboutIcon " style="height: 100%;cursor:pointer" onclick="activate()">  <i style="color:green;"class="fa fa-lg fa-pencil"></i></buttton>
+              <buttton class="saveAboutIcon" style="height: 100%;cursor:pointer;display:none;" onclick="saveAbout()">  <i style="color:green;"class="fa fa-lg fa-save"></i></buttton>
+              </div>
+              
+          </div>
+          
+          </div>
+          
+          
+          <hr>
+          
+          
+          
+          
+           <div class="row">
+               
+          <div class="col s4 m4" style="height:100%;text-align:center">
+              <button class="btn red" id="_myStories" style=""><i style="font-size:24px" class="fa fa-lg fa-book"></i></button>
+          </div>
+          <div class="col s4 m4" style="height:100%;text-align:center">
+          <button class="btn black" id="_addStory" style=""><i style="font-size:24px" class="fa fa-lg fa-plus-square"></i></button>
+          </div>
+          <div class="col s4 m4" style="height:100%;text-align:center">
+           <button class="btn  black" id="_likedStories"style=""><i style="font-size:24px" class="fa fa-lg fa-heart"></i></button>
+          </div>
+          
+          </div>
+          
+      
+  </div>
+   </div>
+            </div>
+            <div class="col s0 m1  ">
+            </div>
+
+ 
+</div>
+     
+           
+           
+           
+           
+           
+           
+           
+           
+           
+             <div class="row myStories" style="">
+            <div class="col s0 m1"></div>
+  <div class="col s12 m10">
+    <div class="card ">
+      <div class="card-content ">
+      
+      <h3>My Stories</h3>
+       <%- include ('./stories/functions') -%> 
+<div class="row myStoriesContent">
+    <%stories.forEach(function(element){%>
+    
+    <div class="col s12 m4">
+      <div class="card">
+         
+        <div class="card-content center-align">
+          <h6><%=element.title%></h6>
+<!--          <div class="story-text" style="height:120px;"><% (truncate(element.body,150)) %></div>-->
+          <br>
+          <div class="chip">
+              
+            <img src=" <%=element.author.image%>">
+              
+            <%=element.username%>
+          </div>
+        </div>
+        <div class="card-action center-align">
+          <a class="btn grey" href="/stories/show/<%=element._id%>">Read</a>
+        </div>
+      </div>
+    </div>
+  
+  <%});%>
+</div>
+  </div>
+   </div>
+            </div>
+            <div class="col s0 m1  ">
+            </div>
+
+ 
+</div>
+           
+           
+           
+           
+           
+           
+           
+           
+          
+           
+                  <div class="row addStory">
+            <div class="col s0 m1"></div>
+  <div class="col s12 m10">
+   
+      
+      
+ <h2 style="text-align: center;">Add Story</h2>
+
+      <form action="/addingstory" method="post" class="col s12">
+    <div class="row">
+      <div class="input-field">
+        <input type="text" name="title" required>
+        <label for="title">Title</label>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="input-field">
+        <select name="status" required>
+          <option value="public" selected>Public</option>
+          <option value="private">Private</option>
+          <option value="unpublished">Unpublished</option>
+        </select>
+        <label for="status">Status</label>
+      </div>
+    </div>
+
+          
+          <div class="row">
+      <div class="input-field">
+        <input type="text" name="keywords" required>
+        <label for="keywords">Story Type</label>
+      </div>
+    </div>
+          
+    <div class="row">
+     
+    <input type="checkbox" name="allowComments" class="filled-in" id="filled-in-box" checked="checked">
+        <label for="filled-in-box">Allow Comments</label>
+
+    
+
+    </div>
+    
+
+    
+    <div class="row" >
+      <div class="input-field">
+        <h5>Tell Us Your Story:</h5>
+        <textarea name="body" required></textarea>
+      </div>
+    </div>
+
+    <input type="submit" value="Save" class="btn">
+   
+  </form>
+          
+  
+
+            </div>
+            <div class="col s0 m1  ">
+            </div>
+
+ 
+</div>
+           
+           
+           
+           
+           
+           
+           
+           
+        
+                    <div class="row likedStories" style="display:none;">
+            <div class="col s0 m1"></div>
+  <div class="col s12 m10">
+    <div class="card ">
+      <div class="card-content ">
+      <h3>Liked Stories</h3>
+       <%- include ('./stories/functions') -%> 
+<div class="row likedStoriesContent">
+    <%stories.forEach(function(element){%>
+    
+    <div class="col s12 m4">
+      <div class="card">
+          <%if(element.userid == useremail ){%>
+        <div class="card-image">
+          <a href="/stories/edit/<%=element._id%>" class="btn-floating halfway-fab red">
+            <i class="fa fa-pencil"></i>
+          </a>
+        </div>
+          <%}%>
+        <div class="card-content center-align">
+          <h5><%=element.title%></h5>
+<!--          <div class="story-text" style="height:120px;"><% (truncate(element.body,150)) %></div>-->
+          <br>
+          <div class="chip">
+              
+            <img src=" <%=element.author.image%>">
+              
+            <%=element.username%>
+          </div>
+        </div>
+        <div class="card-action center-align">
+          <a class="btn grey" href="/stories/show/<%=element._id%>">Read More</a>
+            <div class="btn" style="background-color:transparent;margin:5px;" ><i class="fa fa-lg fa-heart" style="color:red;"></i></div>
+        </div>
+      </div>
+    </div>
+  
+  <%});%>
+</div>
+     
+  </div>
+   </div>
+            </div>
+            <div class="col s0 m1  ">
+            </div>
+
+ 
+</div>
+          
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+    </div>
+    
+    
+    
+    
+    <%- include('./partials/footerForStories') -%>
+	
+
+
+</body>
+<script src="//cdn.ckeditor.com/4.14.0/full/ckeditor.js"></script>
+	 <script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script>
+    $(document).ready(() => {
+      $('.button-collapse').sideNav();
+          $('select').material_select();
+    });
+      
+      setUserData();
+      
+      
+        $('.likedStories').hide();
+           $('.addStory').hide();
+           $('.myStories').show();
+       
+      $("#_myStories").attr("onclick","_myStoriesClick()");
+      $("#_addStory").attr("onclick","_addStoryClick()");
+      $("#_likedStories").attr("onclick","_likedStoriesClick()");
+      
+      
+      function _addStoryClick(){
+           $('.likedStories').hide();
+           $('.addStory').show();
+           $('.myStories').hide();
+          
+           if(document.getElementById('_myStories').classList.contains('red'))
+            document.getElementById('_myStories').classList.replace('red','black')
+           if(document.getElementById('_addStory').classList.contains('black'))
+            document.getElementById('_addStory').classList.replace('black','red')
+           if(document.getElementById('_likedStories').classList.contains('red'))
+            document.getElementById('_likedStories').classList.replace('red','black') 
+      }
+      
+      
+      function _myStoriesClick(){
+           $('.likedStories').hide();
+           $('.addStory').hide();
+           $('.myStories').show();
+          
+          loadByAjax('MY');
+           if(document.getElementById('_myStories').classList.contains('black'))
+            document.getElementById('_myStories').classList.replace('black','red')
+           if(document.getElementById('_addStory').classList.contains('red'))
+            document.getElementById('_addStory').classList.replace('red','black')
+           if(document.getElementById('_likedStories').classList.contains('red'))
+            document.getElementById('_likedStories').classList.replace('red','black') 
+      }
+      
+       function _likedStoriesClick(){
+           $('.likedStories').show();
+           $('.addStory').hide();
+           $('.myStories').hide();
+          
+           
+           if(document.getElementById('_myStories').classList.contains('red'))
+            document.getElementById('_myStories').classList.replace('red','black')
+           if(document.getElementById('_addStory').classList.contains('red'))
+            document.getElementById('_addStory').classList.replace('red','black')
+           if(document.getElementById('_likedStories').classList.contains('black'))
+            document.getElementById('_likedStories').classList.replace('black','red') 
+           loadByAjax('LIKED');
+      }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      function loadByAjax(type)
+{
+    if(type=='LIKED')
+       {$('.likedStoriesContent').html('');}
+    else if(type=='MY')
+        $('.myStoriesContent').html('');
+    
+
+     $.ajax({
+          type: "POST",
+          url: "/getStoriesForMe",
+          data:  { storyType: type },
+          success: function(response_data){
+                
+              var data_str = JSON.stringify(response_data);
+              var ele = JSON.parse(data_str)
+              
+              
+              if(type=='LIKED'){
+              for (element of ele){
+          $('.likedStoriesContent').append('<div class="col s12 m4"><div class="card">        <div class="card-content center-align"><h6>'+element.title+'</h6><br><div class="chip"><img src=" '+element.author.image+'">'+element.author.name+'</div></div><div class="card-action center-align">          <a class="btn grey" href="/stories/show/'+element._id+'">Read</a><div class="btn" style="background-color:transparent;margin:5px;color:black;" ><i class="fa fa-lg fa-heart" style="color:red;"></i> '+element.likedBy.length+'</div></div></div></div></div>')
+              }
+            }
+              else{
+                  for (element of ele){
+          $('.myStoriesContent').append('<div class="col s12 m4"><div class="card">        <div class="card-content center-align"><h6>'+element.title+'</h6><br><div class="chip"><img src=" '+element.author.image+'">'+element.author.name+'</div></div><div class="card-action center-align">          <a class="btn grey" href="/stories/show/'+element._id+'">Read More</a></div></div></div></div>')
+              }
+              }
+          }
+          });
+}
+    
+      function activate(){
+          
+          $('.editAbout').show();
+          
+          $('.displayAbout').hide();
+          $('.editAbout')[0].value=document.getElementById('_displayAbout').innerText;
+          $('.editAboutIcon').hide();
+          $('.saveAboutIcon').show();
+      }
+      
+      function saveAbout(){
+
+          var newAbout = $('.editAbout')[0].value.trim();
+          
+          if(newAbout==''){
+              alert('About Left Empty');
+              return;
+          }
+          
+          
+          updateAboutAjax(newAbout);
+          document.getElementById('_displayAbout').innerText= newAbout;
+          
+           $('.editAbout').hide();
+          $('.displayAbout').show();
+          
+          $('.editAboutIcon').show();
+          $('.saveAboutIcon').hide();
+          
+          
+          
+      }
+      
+      
+      function updateAboutAjax(newAbout){
+          $.ajax({
+          type: "POST",
+          url: "/updateAbout",
+          data:  { about: newAbout },
+          success: function(response_data){
+             
+                  console.log(response_data)
+             
+          }
+          });
+      }
+      
+      
+      function setUserData(){
+          $.ajax({
+          type: "POST",
+          url: "/getUserData",
+          data:  { },
+          success: function(response_data){
+             
+              document.getElementById('_displayAbout').innerText=response_data.about;
+              document.getElementById('_followers').innerText="FOLLOWERS: "+response_data.followers.length;
+              document.getElementById('_following').innerText="FOLLOWING: "+response_data.following.length;
+              document.getElementById('name_image').innerHtml='<img src="'+ response_data.image%+'" style="height: 100px;" class="circle responsive-img"><br>'+ response_data.name;
+          
+          }
+          }
+          
+          );
+      }
+      
+      
+      
+      
+      
+       CKEDITOR.replace('body');
+  </script>
+
+
+

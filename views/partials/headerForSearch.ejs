@@ -1,26 +1,13 @@
 <nav class="grey darken-4" style="height:80px;">
   <div class="container">
     <div class="nav-wrapper">
-      <a href="/dashboard" class="brand-logo center">StoryBooks</a>
-      <a href="#" data-activates="main-menu" class="button-collapse show-on-large"><i style="font-size:24px" class="fa fa-lg fa-bars"></i></a>
-           <ul class="left hide-on-small-only">
-          <%if(user){%>
-        <li><a href="/stories"><i style="font-size:24px" class="fa fa-lg fa-home"></i></a></li>
-        <li><a href="/stories"><i style="font-size:24px" class="fa fa-lg fa-compass"></i></a></li>
-          <%}%>
-        </ul>
-      <!-- RIGHT NAV -->
-      <ul class="right hide-on-small-only">
-        
-        
-          <%if(user){%>
-          <li><a href="/search"><i style="font-size:24px" class="fa fa-lg fa-search"></i></a></li>
-        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-coffee"></i></a></li>
-        <li><a href="/me"><i style="font-size:24px" class="fa fa-lg fa-user-circle-o"></i></a></li>
-        
-          <%}%>
-          <li><a href="/stories"><i style="font-size:24px" class="fa fa-lg fa-book"></i></a></li>
-      </ul>
+       <a href="#" data-activates="main-menu" class="button-collapse show-on-large"><i style="font-size:24px" class="fa fa-lg fa-bars"></i></a>
+        <div class="center">
+        <input type=text class="center" style="width:60%" id="searchbar" onkeyup ="loadByAjax()" placeholder="Search stories, authors or articles..." >
+            </div>
+     
+         
+     
       <!-- SIDE MENU -->
       <ul class="side-nav" id="main-menu">
         
@@ -34,7 +21,7 @@
         <% } %>
        
          <% if (user){ %> 
-        <li style="text-align:center;"><div class="chip blue"><a href="/me" class="text-white"><%=user%></a></div></li>
+       <li style="text-align:center;"><div class="chip blue"><a href="/me" class="text-white"><%=user%></a></div></li>
         <li class="divider"></li>
         <li><a href="/stories"><i style="font-size:24px" class="fa fa-lg fa-book"></i> Public Stories</a></li>
         <li class="divider"></li>

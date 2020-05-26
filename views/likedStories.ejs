@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <head>
 	<meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,15 +7,15 @@
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <title>Storybooks</title>
 </head>
-
-<body style="background:#eee">
-     <%- include('./../partials/header'); -%>
+<body>
+	
+	<%- include('partials/header'); -%>
     
     
     <main>
    <div class = "container">
-<h3>My Stories</h3>
-       <%- include ('./functions') -%> 
+<h3>Liked Stories</h3>
+       <%- include ('./stories/functions') -%> 
 <div class="row">
     <%stories.forEach(function(element){%>
     
@@ -42,6 +41,7 @@
         </div>
         <div class="card-action center-align">
           <a class="btn grey" href="/stories/show/<%=element._id%>">Read More</a>
+            <div class="btn" style="background-color:transparent;margin:5px;" ><i class="fa fa-lg fa-heart" style="color:red;"></i></div>
         </div>
       </div>
     </div>
@@ -51,23 +51,19 @@
     
       </div>  
     </main>
-    <%- include('./../partials/footerForStories') -%>
+	<%- include('partials/footerForStories'); -%>
+
+
 </body>
- <script
+
+	 <script
   src="https://code.jquery.com/jquery-3.2.1.js"
   integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
   crossorigin="anonymous">
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-
-<script>
-    
-     $(document).ready(() => {
+  <script>
+    $(document).ready(() => {
       $('.button-collapse').sideNav();
-       $('select').material_select();
     });
-    
-
-</script>
-</html>
-
+  </script>

@@ -6,6 +6,28 @@ const url = require('url');
 var ejs = require('ejs');
 var moment = require('moment');
 const methodOverride = require('method-override');
+var nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'contact.writingdesk@gmail.com',
+    pass: 'admin@wd'
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
 
 
 //pass
@@ -36,7 +58,7 @@ var middleFunctionAdmin = function(req, res, next){
     if((req.session.userType=="user")&&req.session.isLogin==1){
       next();
    } else {
-     res.redirect("/");
+     res.redirect('/');
    }
   }
 
@@ -76,6 +98,9 @@ var membersSchema = new mongoose.Schema({
     },
     userType:String,
     active:String,
+    followers:[],
+    about:String,
+    following:[],
     image:{
         type:String
         }
@@ -91,9 +116,11 @@ var storySchema=new mongoose.Schema({
   status:String,
   allowComments:Boolean,
   date:Date,
+    keywords:[],
   author:membersSchema,
   username:String,
   userid:String,
+  likedBy:[],
   comments:[
   {
     commentBody:String,
@@ -143,6 +170,7 @@ passport.use(new GoogleStrategy({
                  name:profile.displayName,
                  email:profile.emails[0].value,
                  userType:'user',
+                 about:' Hey there, Im a writer on Writing Desk.',
                  active:'1',
                  image:profile.photos[0].value
                  }).save().then((newUser)=>{
@@ -211,9 +239,253 @@ app.get('/home',function(req,res)
 
 
 
+app.post('/likeStory',middleFunctionUser, (req, res) => {
+
+        
+    var liked=req.body.like;
+    var storyId = req.body.storyId;
+    console.log(req.body);
+    stories.findOne({_id: storyId})
+    .then(story=>{
+        if(liked&&(!story.likedBy.includes(req.session.email)))
+            {
+                if(story.likedBy)
+        story.likedBy.push(req.session.email)
+                else{
+                    story.likedBy=[];
+                    story.likedBy.push(req.session.email)
+                }
+            }
+        else
+         {
+         if(story.likedBy.includes(req.session.email)){
+            story.likedBy.remove(req.session.email) 
+         }
+         }
+        
+        
+        story.title = story.title;
+        
+        story.save().then(story=>{
+            console.log(story.likedBy.length)
+        res.send(story.likedBy.length.toString());
+        })
+        .catch(err=>{})
+        
+    })
+   
+   
+
+
+});
 
 
 
+
+
+
+app.post('/getUserData',middleFunctionUser, (req, res) => {
+
+        
+    
+    members.findOne({email: req.session.email})
+    .then(member=>{
+        
+        res.send(member)
+        
+        
+        
+    })
+
+});
+
+
+
+
+app.post('/updateAbout',middleFunctionUser, (req, res) => {
+
+        
+    var newAbout = req.body.about;
+    members.findOne({email: req.session.email})
+    .then(member=>{
+        
+                if(member.about)
+                member.about=newAbout;
+                else{
+                    member.about="";
+                    member.about=newAbout;
+                }
+        
+        member.save().then(user=>{
+        res.send(user)
+        })
+        .catch(err=>{})
+        
+    })
+
+});
+
+
+
+
+app.post('/unfollowuser',middleFunctionUser, (req, res) => {
+
+        var receiverData = req.body.receiverData;
+	    var senderData = {name: req.session.name,
+                          email:req.session.email}
+	members.findOne({email:req.session.email})
+	.then(member=>{
+	       
+		 
+        
+        
+        
+                if(member.following)
+        member.following.remove(receiverData)
+                
+            
+          member.save().then(member=>{
+              
+              console.log(member);
+              
+                members.findOne({email:receiverData.email})
+	           .then(receiver=>{
+	
+		 
+                if(receiver.followers)
+                    {
+                        receiver.followers.remove(senderData)
+                    
+                    }
+                
+            
+                receiver.save().then(user=>{
+                    
+//                    console.log("Error to be rectified ")
+                    res.send(user.followers);
+                    
+              
+                    })
+         
+	           })
+              
+          })
+         
+	})
+        
+
+});
+
+
+
+
+app.post('/followuser',middleFunctionUser, (req, res) => {
+
+        var receiverData = req.body.receiverData;
+	    var senderData = {name: req.session.name,
+                          email:req.session.email}
+	members.findOne({email:req.session.email})
+	.then(member=>{
+	       
+		 
+                if(member.following)
+        member.following.push(receiverData)
+                else{
+                    member.following=[];
+                     member.following.push(receiverData)
+                }
+            
+          member.save().then(member=>{
+              
+              
+              
+                members.findOne({email:receiverData.email})
+	           .then(receiver=>{
+	
+		 
+                if(receiver.followers)
+                    receiver.followers.push(senderData)
+                else{
+                        receiver.followers=[];
+                        receiver.followers.push(senderData)
+                }
+            
+                receiver.save().then(user=>{
+                    console.log(user);
+                    res.send(user.followers);
+                    
+              
+                    })
+         
+	           })
+              
+          })
+         
+	})
+        
+
+});
+
+
+
+
+
+
+
+
+app.post('/sendingfanmail',middleFunctionUser, (req, res) => {
+
+        
+        var mailOptions = {
+        from: 'contact.writingdesk@gmail.com',
+        to: req.body.writer,
+        subject: req.body.title+"  by - "+req.session.email,
+        html: req.body.body
+            };
+      
+    transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+        console.log(error);
+        res.redirect('/errormail')
+    } else {
+        console.log('Email sent: ' + info.response);
+        res.redirect('/successmail')
+    }
+        });
+
+
+});
+
+
+
+
+
+app.put('/mail/:id', (req, res) => {
+  stories.findOne({
+    _id: req.params.id
+  })
+  .then(story => {
+        
+        var mailOptions = {
+        from: 'contact.writingdesk@gmail.com',
+        to: req.body.email,
+        subject: req.body.subject,
+        html: story.body
+            };
+      
+    transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+        console.log(error);
+        res.redirect('/errormail')
+    } else {
+        console.log('Email sent: ' + info.response);
+        res.redirect('/successmail')
+    }
+        });
+
+      
+  });
+});
 
 
 
@@ -225,6 +497,7 @@ app.get('/stories/my', (req, res) => {
         res.render('stories/my', {
          stories: story,
          user:req.session.name,
+            useremail:req.session.email
     
       })
       
@@ -287,6 +560,7 @@ app.get('/stories', (req, res) => {
         res.render('stories/index', {
          stories: story,
          user:req.session.name,
+            useremail:req.session.email
     
       })
       
@@ -306,7 +580,26 @@ app.get('/stories/show/:id', (req, res) => {
     res.render('stories/show', {
       story: userStory,
         user:req.session.name,
-        moment:moment
+        moment:moment,
+        useremail:req.session.email,
+    });
+  });
+});
+
+
+
+
+// Show Single Story
+app.get('/userpage/:id',middleFunctionUser, (req, res) => {
+  members.findOne({
+    _id: req.params.id
+  })
+  .then(member => {
+    res.render('userpage', {
+      userDetails: member,
+        user:req.session.name,
+        moment:moment,
+        useremail:req.session.email,
     });
   });
 });
@@ -356,6 +649,9 @@ app.put('/stories/:id', (req, res) => {
     _id: req.params.id
   })
   .then(story => {
+      
+       var str_keywords = req.body.keywords;
+    var arr = str_keywords.split(",");
         var allow;
         if(req.body.allowComments)
             allow=true;
@@ -365,11 +661,13 @@ app.put('/stories/:id', (req, res) => {
       //set new values
       story.title = req.body.title;
       story.body = req.body.body;
+      story.keywords = arr;
       story.status = req.body.status;
       story.allowComments = allow;
       
       
-      story.save().then(story=>{
+      story.save()
+          .then(story=>{
           res.redirect('/dashboard')
       })
       
@@ -404,7 +702,8 @@ app.post('/addingstory',(req,res)=>
   else
     allow=false;
     
-    
+    var str_keywords = req.body.keywords;
+    var arr = str_keywords.split(",");
     
     members.findOne({email:req.session.email})
     .then(storyAuthor=>{
@@ -415,6 +714,8 @@ app.post('/addingstory',(req,res)=>
     status:req.body.status,
     body:req.body.body,
     date:Date.now(),
+            keywords:arr,
+            likedBy:[],
     author:storyAuthor,
     allowComments:allow,
     username:req.session.name,
@@ -441,11 +742,68 @@ app.post('/addingstory',(req,res)=>
 })
 
 
+app.get('/error',(req,res)=>
+{
+  res.render('error',{
+    user:req.session.name,
+      message:"Error ! page"
+  });
+})
+
+
+app.get('/errormail',(req,res)=>
+{
+  res.render('error',{
+    user:req.session.name,
+      message:"Error! sending mail"
+  });
+})
+app.get('/successmail',(req,res)=>
+{
+  res.render('error',{
+    user:req.session.name,
+      message:"Success ! Mail has been sent"
+  });
+})
+
+
+app.get('/mailwriter',middleFunctionUser, (req, res) => {
+    
+    members.find({})
+  .then(member => {
+        
+    res.render('mailwriter', {
+        author: member,
+        user:req.session.name,
+        useremail:req.session.email,
+    });
+  });
+
+});
+
+
 app.get('/about',(req,res)=>
 {
   res.render('about',{
     user:req.session.name
   });
+})
+app.get('/likedStories',middleFunctionUser,(req,res)=>
+{
+   stories.find({
+       
+       likedBy:req.session.email
+   })
+    .then(story => {
+      
+        res.render('likedStories', {
+         stories: story,
+         user:req.session.name,
+            useremail:req.session.email
+    
+      })
+      
+    });
 })
 
 app.get('/add',middleFunctionUser,(req,res)=>
@@ -454,6 +812,182 @@ app.get('/add',middleFunctionUser,(req,res)=>
     user:req.session.name
   });
 })
+
+app.get('/search',middleFunctionUser,(req,res)=>
+{
+    
+     stories.find({})
+    .then(story => {
+      
+        res.render('search', {
+         stories: story,
+            userDetails:story[0].author,
+         user:req.session.name,
+            useremail:req.session.email
+    
+      })
+      
+    });
+ 
+})
+
+
+app.post('/getStoriesForMe',(req,res)=>{
+   
+    
+    var type=req.body.storyType;
+   
+    if(type=='LIKED'){
+    stories.find({
+        likedBy:req.session.email
+    })
+    .then(story=>{
+        console.log(story)
+        res.send(story)
+    })
+    }
+    else{
+        stories.find({
+        userid:req.session.email
+    })
+    .then(story=>{
+        console.log(story)
+        res.send(story)
+    })
+    }
+   
+   
+    
+    
+});
+
+app.post('/searchQuery',(req,res)=>{
+   
+    
+    var search=req.body.search;
+    var findobj={};
+    if(search!='')
+        findobj["$or"]= [{
+        "title":   {$regex : ".*"+search+".*"}
+    }, {
+        "keywords":{$regex : ".*"+search+".*"}
+    },{
+        "username": {$regex : ".*"+search+".*"}
+    }]
+    else{
+        delete findobj["$or"];
+    }
+    stories.find(findobj)
+    .then(story=>{
+        console.log("--------------------===---------------------------===--------------------===--->>>")
+        console.log(story)
+        res.send(story)
+    })
+   
+   
+    
+    
+});
+
+
+
+
+
+app.post('/userRelations',(req,res)=>{
+    
+    var search=req.body.receiverData;
+   
+    members.findOne({
+        email:req.session.email
+    })
+    .then(member=>{
+        console.log(member.following)
+        console.log(search)
+        var isFollowing=0;
+        for(var i=0;i<member.following.length;i++)
+        {    
+             console.log("-----")
+             if(JSON.stringify(member.following[i]) === JSON.stringify(search))
+             {isFollowing=1;break;}
+        }
+        if(isFollowing===1)
+        res.send("IS_FOLLOWING")
+        else{
+            res.send("NOT_FOLLOWING")
+        }
+    })
+    
+   
+       
+    
+    
+});
+
+
+
+
+
+
+
+
+
+app.post('/searchWriterName',(req,res)=>{
+   
+    
+    var search=req.body.search;
+    var findobj={};
+    if(search!='')
+        findobj["$or"]= [{
+        "name":   {$regex : ".*"+search+".*"}
+    }, {
+        "email":{$regex : ".*"+search+".*"}
+    }]
+    else{
+        delete findobj["$or"];
+    }
+    members.find(findobj)
+    .then(member=>{
+        res.send(member)
+    })
+   
+   
+    
+    
+});
+
+
+
+
+
+app.get('/me',middleFunctionUser,(req,res)=>
+{
+     stories.find({userid:req.session.email})
+    .then(story => {
+      
+         
+         members.findOne({email:req.session.email})
+         .then(member=>{
+             res.render('me', {
+         stories: story,
+            userDetails:member,
+            user:req.session.name,
+            useremail:req.session.email
+    
+      })
+             
+         })
+         
+         
+        
+      
+    });
+    
+      
+  });
+    
+    
+	
+
 
 
 app.get('/news',middleFunctionUser,(req,res)=>
@@ -464,6 +998,15 @@ app.get('/news',middleFunctionUser,(req,res)=>
 })
 
  
+app.get('/searchWriter',middleFunctionUser,(req,res)=>
+{
+	res.render('searchWriter',{
+		user:req.session.name
+	});
+})
+
+ 
+
 
 app.get('/auth/logout',(req,res)=>
 {
