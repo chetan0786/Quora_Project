@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <title>Storybooks</title>
+</head>
+<body>
+	
+	<%- include('partials/header'); -%>
+
+    
+        <div class="row">
+    <div class="col s0 m2"></div>
+        <div class="col s12 m8">
+            <div class="card">
+            <div class="card-content ">
+                
+                <div class="card-title center">
+                    
+                
+                  <font style="font-weight:bold">  Settings Panel</font>
+              
+                    <i class="fa fa-lg fa-spin fa-cog" style="color:grey"></i>
+                
+                <hr>
+                    <div class="row">
+                        <div class="col s0 m1"></div>
+                        <div class="col s5 m5 "><button class="btn black " id="profileSettingsBtn" onclick="showProfileSettings()" style="width:100%;">Profile</button></div>
+                        <div class="col s5 m5 "><button class="btn grey" id="storiesSettingsBtn" onclick="showStoriesSettings()" style="width:100%;">Stories</button></div>
+                        <div class="col s0 m1"></div>
+                    </div>
+                </div>
+                
+                </div>
+            
+            </div>
+            
+        </div>
+    <div class="col s0 m2"></div>         
+    </div>
+    
+    
+    
+    <div class="profileSettings" style="">
+    
+           <div class="row">
+    <div class="col s0 m2"></div>
+        <div class="col s12 m8">
+            <div class="card">
+            <div class="card-content ">
+                <h5 class="center" style="margin-top:0px;">SAFE - ZONE</h5><hr>
+                <div class="card-title ">
+                    
+                    <div class="row"><i class="fa fa-1x fa-user"></i> &nbsp;&nbsp;
+                    
+                         <input id="name" style="width:70%;display: inline-block;margin-bottom:0;
+    height: 34px;
+    padding-left:10px;
+              padding-right:10px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;" class=""type="text" value="<%= userDetails.name%>" onkeyup="" placeholder="Your name" >
+                    
+                    </div>
+                    <div class="row"><i class="fa fa-1x fa-users"></i> &nbsp;&nbsp;<div class="form-check" style="display:contents;">
+                        <input class="form-check-input" type="checkbox" value=""  id="defaultCheck1">
+                            <label class="form-check-label" for="defaultCheck1">
+                                Clear all my following
+                            </label>
+                        </div></div>
+                    <div class="row"><font style="color:black;font-weight:bold;font-size:14px;">ABOUT: </font><input id="about" style="width:70%;display: inline-block;margin-bottom:0;
+    height: 34px;
+    padding-left:10px;
+              padding-right:10px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;" class=""type="textarea" value="" onkeyup="" value="<%=userDetails.about %>"placeholder="Tell us something about your self" ></div><hr>
+                    
+                    
+                    <div class="row center"><div class="col s6 m6"><button class="btn red cancelBtn">cancel</button></div><div class="col s6 m6"><button class="btn green profileSaveBtn">save</button></div></div>
+                    
+                  
+                </div>
+                
+                
+                </div>
+            
+            </div>
+            
+        </div>
+    <div class="col s0 m2"></div>         
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+           <div class="row">
+    <div class="col s0 m2"></div>
+        <div class="col s12 m8">
+            <div class="card">
+            <div class="card-content ">
+                <h5 class="center" style="margin-top:0px;">DANGER - ZONE</h5><hr>
+                <div class="card-title ">
+                    
+                    <label>**Once deleted it cant be undone. Be carefull...</label>
+                    
+                    <div class="row center"><button class="btn red deleteMe" >Delete my account</button></div>
+                     <div class="row center"><button class="btn orange clearAllMyData" >&nbsp;clear all my data&nbsp;</button></div>
+                  
+                </div>
+                
+                
+                </div>
+            
+            </div>
+            
+        </div>
+    <div class="col s0 m2"></div>         
+    </div>
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+    <div class="storiesSettings" style="display:none;">
+    
+           <div class="row">
+    <div class="col s0 m2"></div>
+        <div class="col s12 m8">
+            <div class="card">
+            <div class="card-content ">
+                <h5 class="center" style="margin-top:0px;">SAFE - ZONE</h5><hr>
+                <div class="card-title ">
+                    
+                    
+                    
+                    <div class="row"><i class="fa fa-1x fa-comments"></i> &nbsp;&nbsp;<div class="form-check" style="display:contents;">
+                        <input class="form-check-input" type="checkbox" value=""  id="commentsCheck">
+                            <label class="form-check-label" for="commentsCheck">
+                                Clear all my comments
+                            </label>
+                        </div></div>
+                    
+                    <div class="row"><i class="fa fa-1x fa-heart"></i> &nbsp;&nbsp;<div class="form-check" style="display:contents;">
+                        <input class="form-check-input" type="checkbox" value=""  id="likesCheck">
+                            <label class="form-check-label" for="likesCheck">
+                                Clear all my likes
+                            </label>
+                        </div></div><hr>
+                    
+                      <div class="row center"><div class="col s6 m6"><button class="btn red cancelBtn">cancel</button></div><div class="col s6 m6"><button class="btn green storiesSaveBtn">save</button></div></div>
+                  
+                </div>
+                
+                
+                </div>
+            
+            </div>
+            
+        </div>
+    <div class="col s0 m2"></div>         
+    </div>
+    
+    
+    
+            <div class="row">
+    <div class="col s0 m2"></div>
+        <div class="col s12 m8">
+            <div class="card">
+            <div class="card-content ">
+                <h5 class="center" style="margin-top:0px;">DANGER - ZONE</h5><hr>
+                <div class="card-title ">
+                    
+                    <label>**Once deleted it cant be undone. Be carefull...</label>
+                    
+                    <div class="row center"><button class="btn red deleteStories" >Delete all my stories</button></div>
+                     
+                  
+                </div>
+                
+                
+                </div>
+            
+            </div>
+            
+        </div>
+    <div class="col s0 m2"></div>         
+    </div>
+    
+    
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+	<%- include('partials/footerForStories'); -%>
+
+
+</body>
+
+	 <script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script>
+    $(document).ready(() => {
+      $('.button-collapse').sideNav();
+        $('#about')[0].value="<%= userDetails.about%>"
+    });
+      
+      
+      
+      
+      function showStoriesSettings(){
+            
+           $('.profileSettings').hide();
+           $('.storiesSettings').show();
+          
+          
+           if(document.getElementById('storiesSettingsBtn').classList.contains('grey'))
+            document.getElementById('storiesSettingsBtn').classList.replace('grey','black')
+           if(document.getElementById('profileSettingsBtn').classList.contains('black'))
+            document.getElementById('profileSettingsBtn').classList.replace('black','grey')
+
+      }
+      
+       function showProfileSettings(){
+           $('.profileSettings').show();
+           $('.storiesSettings').hide();
+          
+          
+           if(document.getElementById('profileSettingsBtn').classList.contains('grey'))
+            document.getElementById('profileSettingsBtn').classList.replace('grey','black')
+           if(document.getElementById('storiesSettingsBtn').classList.contains('black'))
+            document.getElementById('storiesSettingsBtn').classList.replace('black','grey')
+      }
+      
+      
+   $(document).on('click','.cancelBtn',function(){
+       window.location.replace("/me");
+   });
+      
+      
+      
+      $(document).on('click','.profileSaveBtn',function(){
+       updateProfile()
+   });
+      
+        $(document).on('click','.storiesSaveBtn',function(){
+       updateStorySettings()
+   });
+       $(document).on('click','.deleteStories',function(){
+       deleteAllMyStories()
+   });
+      
+       $(document).on('click','.deleteMe',function(){
+       deleteme()
+   });
+      
+       $(document).on('click','.clearAllMyData',function(){
+       clearAllData()
+   });
+      
+        function updateProfile(){
+          $.ajax({
+          type: "POST",
+          url: "/updateUserProfile",
+          data:  {name:document.getElementById('name').value,
+                  clear:document.getElementById("defaultCheck1").checked,
+                  about:document.getElementById('about').value 
+                 },
+          success: function(response_data){
+             
+              alert('Data has been updated');
+              window.location.replace("/me");
+          
+          }
+          }
+          
+          );
+      }
+      
+      function updateStorySettings(){
+          $.ajax({
+          type: "POST",
+          url: "/updateStorySettings",
+          data:  {clearComments:document.getElementById('commentsCheck').checked,
+                  clearLikes:document.getElementById("likesCheck").checked
+                 },
+          success: function(response_data){
+             
+              alert('Data has been updated');
+              window.location.replace("/me");
+          
+          }
+          }
+          
+          );
+      }
+      
+      
+      
+      function deleteAllMyStories(){
+          $.ajax({
+          type: "DELETE",
+          url: "/deleteAllMyStories",
+          success:function(response_data){
+             
+              alert('All Stories deleted');
+              window.location.replace("/me");
+          
+          }
+          });
+      }
+      
+      
+       function deleteme(){
+          $.ajax({
+          type: "DELETE",
+          url: "/deleteme",
+          success:function(response_data){
+             
+              alert('You no longer exist here');
+              window.location.replace("/me");
+          
+          }
+          });
+      }
+      
+      
+      function clearAllData(){
+          $.ajax({
+          type: "DELETE",
+          url: "/deleteme",
+          success:function(response_data){
+             
+              alert('Your data has been cleared. Login again to continue...');
+              window.location.replace("/me");
+          
+          }
+          });
+      }
+      
+      
+  </script>
+
+
+

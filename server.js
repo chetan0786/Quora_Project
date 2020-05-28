@@ -1,5 +1,7 @@
+const port = process.env.PORT || 5000;
 var express=require('express')
 var app=express()
+var server = app.listen(port);
 var path=require('path')
 var session=require('express-session')
 const url = require('url');
@@ -7,6 +9,9 @@ var ejs = require('ejs');
 var moment = require('moment');
 const methodOverride = require('method-override');
 var nodemailer = require('nodemailer');
+var io = require('socket.io').listen(server);
+
+
 
 var transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -31,7 +36,7 @@ var transporter = nodemailer.createTransport({
 
 
 //pass
-const port = process.env.PORT || 5000;
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 
@@ -100,6 +105,7 @@ var membersSchema = new mongoose.Schema({
     active:String,
     followers:[],
     about:String,
+    storyRequests:[],
     following:[],
     image:{
         type:String
@@ -145,8 +151,42 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(session({secret:"Login"}));
 
-
-
+///^&*678
+users = [];
+connections = [];
+io.sockets.on('connection',function(socket){
+    connections.push(socket)
+    console.log('Connected : %s socket connected',connections.length);
+    
+    
+    //disconnect
+    socket.on('disconnect',function(data){
+//        if(!socket.username) return;
+    users.splice(users.indexOf(socket.username),1)
+    updateUsernames();
+    connections.splice(connections.indexOf(socket),1);
+    console.log('Disconnected: %s sockets connected',connections.length)     
+    });
+   //Send Message
+    socket.on('send message',function(data,userimg,username){
+ 
+        io.sockets.emit('new message',{msg: data,img: userimg, name:username});
+    });
+    //new user
+    socket.on('new user',function(data,callback){
+ 
+        callback(true)
+        socket.username = data;
+        users.push(socket.username);
+        updateUsernames();
+    });
+    
+    
+    function updateUsernames(){
+        io.sockets.emit('get users',users);
+    }
+   
+});
 
 
 
@@ -230,11 +270,97 @@ app.get('/home',function(req,res)
     req.session.userType=req.query.userType;
     req.session.name=req.query.name;
     
-	 return res.redirect('/dashboard');
+	 return res.redirect('/myhome');
   
 
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.post('/notify',middleFunctionUser, (req, res) => {
+
+        
+    var userData=req.body.receiverData;
+    var storyId = req.body.story;
+    var type = req.body.type;
+    
+    console.log(req.body);
+    
+    var requestObj = {
+        fromEmail : req.session.email,
+        fromName:req.session.name,
+        storyId: req.body.story,
+        storyName: req.body.storyName,
+        toEmail:userData.email,
+        toName:userData.name,
+        requestType:type
+    }
+    
+    
+    members.findOne({email:userData.email}).then(user=>{
+               if(user.storyRequests)
+        user.storyRequests.push(requestObj)
+                else{
+                    user.storyRequests=[];
+                    user.storyRequests.push(requestObj)
+                }
+        user.save().then(user=>{
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            console.log(user)
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            res.send("OK");
+        })
+    })
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -298,6 +424,258 @@ app.post('/getUserData',middleFunctionUser, (req, res) => {
     })
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.post('/updateStorySettings',middleFunctionUser, (req, res) => {
+
+        
+    
+    var clearLikes = req.body.clearLikes;
+    var clearComments = req.body.clearComments;
+    
+    console.log(req.body);
+    var senderData = {name: req.session.name,
+                          email:req.session.email}
+    
+    stories.find({})
+    .then(allstory=>{
+        
+
+        for(var i =0;i<allstory.length;i++){
+            stories.findOne({_id:allstory[i]._id}).then(story=>{
+                
+                
+                 if(clearLikes && story.likedBy)
+                    {
+                const index = story.likedBy.indexOf(req.session.email);   
+                if(index>-1)
+                story.likedBy.splice(index, 1);
+                
+                    }
+
+                if(clearComments && story.comments)
+                    {
+                for( var i =0;i< story.comments.length;i++){
+                const index = story.comments.findIndex(function(comment){
+                            return comment.commentUser.email==req.session.email;
+                        });
+                if(index>-1)
+                story.comments.splice(index, 1);
+                }
+                
+            }
+                
+                
+              story.save();  
+                
+            })
+        }
+
+        
+        res.send("OKK")
+        
+        
+        
+//        story.save().then(story=>{
+//        res.send(story)
+//        })
+//        .catch(err=>{})
+        
+    })
+
+});
+
+
+
+
+
+
+
+app.delete('/deleteAllMyStories',middleFunctionUser, (req, res) => {
+
+    
+ stories.deleteMany({
+    userid: req.session.email
+  })
+  .then(()=>{
+          res.send('ok')
+      })  
+
+
+});
+
+
+
+
+
+
+
+
+
+
+app.delete('/deleteme',middleFunctionUser, (req, res) => {
+
+    var mailID=req.session.email;
+    
+    
+    
+    
+  
+    
+    
+ members.remove({
+    email:req.session.email
+  })
+  .then(()=>{
+     // stories destroy
+
+     
+    stories.deleteMany({
+    userid:mailID
+  }).then(()=>{
+        var clearComments=true;
+        var clearLikes =true;
+         stories.find({})
+    .then(allstory=>{
+        
+
+        for(var i =0;i<allstory.length;i++){
+            stories.findOne({_id:allstory[i]._id}).then(story=>{
+                
+                
+                 if(clearLikes && story.likedBy)
+                    {
+                const index = story.likedBy.indexOf(mailID);   
+                if(index>-1)
+                story.likedBy.splice(index, 1);
+                
+                    }
+
+                if(clearComments && story.comments)
+                    {
+                for( var i =0;i< story.comments.length;i++){
+                const index = story.comments.findIndex(function(comment){
+                            return comment.commentUser.email==mailID;
+                        });
+                if(index>-1)
+                story.comments.splice(index, 1);
+                }
+                
+            }
+                
+                
+              story.save();  
+                
+            })
+        }
+             
+             req.session.destroy();
+             
+             
+    })
+    
+    })
+     
+     //session destroy
+          res.send('ok')
+      })  
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.post('/updateUserProfile',middleFunctionUser, (req, res) => {
+
+        
+    var newAbout = req.body.about;
+    var newName = req.body.name;
+    var toBeCleared = req.body.clear;
+    
+    console.log(req.body);
+    var senderData = {name: req.session.name,
+                          email:req.session.email}
+    
+    members.findOne({email: req.session.email})
+    .then(member=>{
+        
+                if(member.about)
+                member.about=newAbout;
+                else{
+                    member.about="";
+                    member.about=newAbout;
+                }
+        
+        member.name=newName;
+        if(toBeCleared)
+            {
+                
+                for( var i =0;i<member.following.length;i++){
+                    var user = member.following[i];
+                    members.findOne({email:user.email})
+                    .then(ruser=>{
+                        
+                        const index = ruser.followers.findIndex(function(person){
+                            return person.email==req.session.email;
+                        });
+                        if (index > -1) {
+                            console.log(index);
+                            ruser.followers.splice(index, 1);
+                        }
+                        else{
+                            console.log("T_T T_T T_T T_T T_T")
+                        }
+                        ruser.save();
+                    })
+                }
+                
+                member.following=[];
+            }
+        
+        member.save().then(user=>{
+        res.send(user)
+        })
+        .catch(err=>{})
+        
+    })
+
+});
+
 
 
 
@@ -379,6 +757,9 @@ app.post('/unfollowuser',middleFunctionUser, (req, res) => {
 
 
 
+
+
+
 app.post('/followuser',middleFunctionUser, (req, res) => {
 
         var receiverData = req.body.receiverData;
@@ -455,6 +836,80 @@ app.post('/sendingfanmail',middleFunctionUser, (req, res) => {
 
 
 });
+
+
+
+
+
+
+
+
+
+
+app.post('/changeStoryRequestType', (req, res) => {
+
+    var type=req.body.type;
+    
+        members.findOne({email:req.session.email}).then(member=>{
+            for(var i=0;i<member.storyRequests.length;i++){
+                if(member.storyRequests[i].toEmail == req.body.toEmail && member.storyRequests[i].fromEmail == req.body.fromEmail && member.storyRequests[i].storyId == req.body.storyId && member.storyRequests[i].requestType == 'REQUEST')
+                  member.storyRequests.splice(i,1);
+            }
+            
+            member.save().then(user=>{
+                res.send("OK")
+            })
+            
+        })
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+app.post('/mailuser', (req, res) => {
+
+        
+        var mailOptions = {
+        from: 'contact.writingdesk@gmail.com',
+        to: req.body.email,
+        subject: req.body.subject,
+        text: req.body.msg
+            };
+      
+    transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+        console.log(error);
+        res.send("NOT OK")
+    } else {
+        console.log('Email sent: ' + info.response);
+        res.send('OK')
+    }
+        });
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -588,19 +1043,41 @@ app.get('/stories/show/:id', (req, res) => {
 
 
 
+app.get('/gotoUserpage/:email',middleFunctionUser, (req, res) => {
+  members.findOne({
+    email: req.params.email
+  })
+  .then(member => {
+    res.redirect('/userpage/'+member._id)
+  });
+});
 
-// Show Single Story
+
+
 app.get('/userpage/:id',middleFunctionUser, (req, res) => {
   members.findOne({
     _id: req.params.id
   })
   .then(member => {
-    res.render('userpage', {
+      
+      if(member.email==req.session.email)
+          res.redirect('/me');
+      else{
+          
+          
+          stories.find({userid:member.email}).then(story=>{
+              res.render('userpage', {
       userDetails: member,
         user:req.session.name,
+                  userStories:story,
         moment:moment,
         useremail:req.session.email,
     });
+              
+          })
+          
+    
+      }
   });
 });
 
@@ -741,6 +1218,26 @@ app.post('/addingstory',(req,res)=>
  
 })
 
+app.get('/settings',middleFunctionUser,(req,res)=>
+{
+    
+    members.findOne({
+        email:req.session.email
+    }).then(member=>{
+        
+        console.log(member)
+        res.render('settings',{
+       user:req.session.name,
+       userDetails:member
+  });
+        
+    })
+    
+  
+})
+
+
+
 
 app.get('/error',(req,res)=>
 {
@@ -830,6 +1327,43 @@ app.get('/search',middleFunctionUser,(req,res)=>
     });
  
 })
+
+
+
+
+
+
+
+
+
+app.post('/getUserStories',(req,res)=>{
+   
+    
+    var email=req.body.useremail;
+   
+    
+    stories.find({
+        userid: email
+    })
+    .then(story=>{
+        
+        res.send(story)
+    })
+    
+   
+   
+   
+    
+    
+});
+
+
+
+
+
+
+
+
 
 
 app.post('/getStoriesForMe',(req,res)=>{
@@ -1005,7 +1539,155 @@ app.get('/searchWriter',middleFunctionUser,(req,res)=>
 	});
 })
 
- 
+
+app.get('/myhome',middleFunctionUser,(req,res)=>
+{
+    
+    
+    stories.find({}).then(story=>{
+        
+        
+         members.findOne({email:req.session.email}).then(member=>{
+              res.render('home',{
+                  userDetails:member,
+		          user:req.session.name,
+                  useremail:req.session.email,
+                stories:story
+	       });
+             
+             
+         })
+        
+        
+        
+        
+    })
+    	
+})
+
+
+
+
+
+
+app.get('/analysis',middleFunctionUser,(req,res)=>
+{
+    
+    
+    stories.find({userid:req.session.email}).then(story=>{
+        
+         members.findOne({email:req.session.email}).then(user=>{
+    
+            res.render('analysis',{
+                user:req.session.name,
+                userDetails: user,
+                stories:story,
+                moment:moment,
+            });    
+            })
+        
+        
+    })
+   
+    
+})
+
+
+
+
+
+
+
+app.get('/explore',middleFunctionUser,(req,res)=>
+{
+    
+    
+
+        
+         members.find({}).then(user=>{
+    
+            res.render('explore',{
+                user:req.session.name,
+                users: user,                
+            });    
+            })
+        
+        
+
+   
+    
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.get('/storyRequests',middleFunctionUser,(req,res)=>
+{
+    
+    
+
+        
+         members.findOne({  email:req.session.email  }).then(user=>{
+    
+            res.render('notifications',{
+                user:req.session.name,
+                users: user,                
+            });    
+            })
+        
+        
+
+   
+    
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.get('/liveChatBox',middleFunctionUser,(req,res)=>
+{
+    members.findOne({email:req.session.email}).then(user=>{
+    
+	res.render('liveChatBox',{
+		user:req.session.name,
+        userDetails: user
+	});    
+    })
+    
+})
+
+  
 
 
 app.get('/auth/logout',(req,res)=>
@@ -1073,7 +1755,7 @@ var message = {
 
 
 
-app.listen(port);
+//app.listen(port);
 
 
 // id:68669218963-mi3a3rv0tlb3j1mb99s2dn9gfd7pnc2l.apps.googleusercontent.com

@@ -33,14 +33,96 @@
               
          </div>
           </div>
+          
+          
+          
+                   <style>
+       
+           .modal-bg1 {
+               position:fixed;
+               top:0;
+               left:0;
+               width:100%;
+               height:100vh;
+               background-color:rgba(0,0,0,0.5);
+               display:flex;
+               justify-content:center;
+               align-items:center;
+               visibility:hidden;
+               opacity:0;
+               transition: visibility 0s opacity 0.5s;
+           }
+           .modal-bg2 {
+               position:fixed;
+               top:0;
+               left:0;
+               width:100%;
+               height:100vh;
+               background:rgba(0,0,0,0.5);
+               display:flex;
+               justify-content:center;
+               align-items:center;
+               visibility:hidden;
+               opacity:0;
+               transition: visibility 0s opacity 0.5s;
+           }
+           
+           .bg-active{
+               visibility:visible;
+               opacity:1;
+           }
+           
+           .modal1{
+               padding:20px;
+               position:relative;
+               background-color:white;
+               width:300px;
+               
+               justify-content:space-around;
+               align-items:center;
+               
+           }
+                     .modal2{
+               padding:20px;
+               position:relative;
+               background-color:white;
+               width:300px;
+               
+               justify-content:space-around;
+               align-items:center;
+               
+           }
+       
+           .modal-close1{
+               position:absolute;
+               top:10px;
+               right:10px;
+               cursor:pointer;
+               font-weight:bold;
+           }
+           
+                     .modal-close2{
+               position:absolute;
+               top:10px;
+               right:10px;
+               cursor:pointer;
+               font-weight:bold;
+           }
+                     
+           
+       </style>
+          
           <div class="row">
-          <div class="col s6 m6 "  id="_followers"style="height:100%;border:1px solid black;text-align:center;font-weight:bold;cursor:pointer;">
+          <div class="col s6 m6 followersClass"  id="_followers"style="height:100%;border:1px solid black;text-align:center;font-weight:bold;cursor:pointer;">
           FOLLOWERS: <%= userDetails.followers.length%>
           </div>
-          <div class="col s6 m6 " id="_following"style="height:100%;border:1px solid black;text-align:center;font-weight:bold;cursor:pointer;">
+          <div class="col s6 m6 followingClass" id="_following"style="height:100%;border:1px solid black;text-align:center;font-weight:bold;cursor:pointer;">
           FOLLOWING: <%= userDetails.following.length%>
           </div>
-      
+             
+         
+              
+              
           
           </div>
           
@@ -298,10 +380,62 @@ display:none;
           
            
            
+              <div class="modal-bg1">
+          
+                <div class="modal1 " >
+           <h5 class="center" style="display:block;"> Followers </h5>        
+                       <div class="" style="overflow-y: auto;height: 300px;">
+           
+            <% var j=0; userDetails.followers.forEach(function(element){j++;%>
+                        <hr>
+                           <a href="/gotoUserpage/<%=element.email%>">
+                                <div style="cursor:pointer;">
+                               <font style="color:black;"><%=j%></font>&nbsp; &nbsp;<font style="color:#039BE5"><%=element.name%></font>
+                           <p style="color:black;margin:0px"><%=element.email%></p>
+                                </div>
+                           </a>
+                        <%})%>    
+                            <hr>
+                         <%if(j==0){%>  
+                           None follows you...
+                           <%}%>
+                           </div>
+                    <div class="btn red align-center" style="display:block;">CLOSE</div>
+           <span class="modal-close1">X</span>
+                        
+           </div>
+
+       </div>
            
            
+           <div class="modal-bg2">
+          
+                <div class="modal2 " >
+           <h5 class="center" style="display:block;"> Following </h5>        
+                       <div class="" style="overflow-y: auto;height: 300px;">
            
-           
+            <% var j=0; userDetails.following.forEach(function(element){j++;%>
+                        <hr>
+                          <a href="/gotoUserpage/<%=element.email%>">
+                                <div style="cursor:pointer;">
+                               <font style="color:black;"><%=j%></font>&nbsp; &nbsp;<font style="color:#039BE5"><%=element.name%></font><br>
+                           <p style="color:black;margin:0px;"><%=element.email%></p>
+                                </div>
+                           </a>
+                        <%})%> 
+                                <hr>
+                         <%if(j==0){%>  
+                           Try to follow someone...
+                           <%}%>
+                           
+                      
+                           </div>
+                    <div class="btn red align-center" style="display:block;">CLOSE</div>
+           <span class="modal-close2">X</span>
+                        
+           </div>
+
+       </div>
            
            
            
@@ -490,6 +624,50 @@ display:none;
           
           );
       }
+      
+      
+        
+          
+           $(document).on('click','.followersClass',function(){
+          
+          var d=$(this).parent().parent().parent().parent().parent().parent()[0].children[4];
+               
+         
+          doit(d);
+               //change children 8
+          d.children[0].children[3].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+           });
+               d.children[0].children[2].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+           });
+          
+      });
+          
+          
+           $(document).on('click','.followingClass',function(){
+          
+          var d=$(this).parent().parent().parent().parent().parent().parent()[0].children[5];
+               
+         
+          doit(d);
+               //change children 8
+          d.children[0].children[3].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+           });
+               d.children[0].children[2].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+           });
+          
+      });
+    
+    
+    
+    function doit(mm){
+
+               mm.classList.add('bg-active');
+        
+           }
       
       
       

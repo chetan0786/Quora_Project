@@ -46,7 +46,7 @@ formatDate= function(date, format){
         <img src="<%= story.author.image%>" style="height: 100px;" class="circle responsive-img">
       </div>
       <div class="card-action">
-        <a href="/stories/user/<%= story.userid%>">More From <%= story.username%></a>
+        <a href="/gotoUserpage/<%= story.userid%>">More From <%= story.username%></a>
       </div>
     </div>
   </div>
@@ -275,20 +275,31 @@ formatDate= function(date, format){
 
          <% }  %>
        <div class="row">
+           <%if(user){%>
   <div class="col s12 m8">
-       <% story.comments.map((value,index)=>{ %>
+       <%}else{%>
+      <div class="col s12 m12">
+      <%}%>
         <div class="card">
           <div class="card-content">
-            <h5><%= value.commentBody %></h5>
-            <div class="chip">
+              <% story.comments.map((value,index)=>{ %>
+              <div class="chip">
               <img src= "<%= value.commentUser.image %>">
               <%= value.commentUser.name %>
             </div>
-            <br>
-            <small> <%= formatDate(value.commentDate ,'MMMM Do YYYY') %> </small>
+                <small  style="float:right;margin-top:10px;"> <%= formatDate(value.commentDate ,'MMMM Do YYYY') %> </small>
+              
+            <p style="background-color:#eee;border:opx solid black;border-radius:5px;padding:10px;font-size:12px;"><%= value.commentBody %></p>
+            
+            
+          
+              <div style="height:5px;"></div>
+              <hr>
+              <div style="height:5px;"></div>
+              <% }) %>
           </div>
         </div>
-      <% }) %>
+      
 </div>
 </div>
        

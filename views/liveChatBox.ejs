@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+       <script src="/socket.io/socket.io.js"></script>
+    <title>Storybooks</title>
+</head>
+<body>
+    <style>
+    
+     body{
+        margin-top:30px;
+    }
+    
+    #userForm{
+        display:none;
+    }
+    
+    </style>
+	<%- include('partials/header'); -%>
+
+    <div class="container">
+    <div id="userFormArea" class="row">
+    
+    <div class="col-md-12">
+        <form id="userForm">
+                <div class="form-group">
+                 
+                 <label>Enter Username</label>
+                <input class="form-control"    placeholder="username" id ="username">
+                    <br/>
+                    <input type="submit" class="btn btn-success" value="Login">
+                    
+                 </div>
+             
+             </form>
+        </div>
+    
+    </div>
+    
+    <div class="row" id='messageArea'>
+        <div class=" col-md-4">
+            <div class="well">
+            <h3>Online Users</h3>
+                <ul class="list-group" id="users"></ul>
+            </div>
+        </div>
+         <div class=" col-md-8">
+             
+             <div class="chat" id="chat"></div>
+             
+             <form id="messageForm">
+                <div class="form-group">
+                 
+                 
+                <textarea class="form-control"  placeholder="Enter Message"   id ="message"></textarea>
+                    <br/>
+                    <input type="button" value="☺️" style="    font-size: 30px;
+    padding: 0px;
+    height: auto;" id="emojiBtn"class="btn orange">
+                    
+                    
+                    <input type="submit" class="btn green" value="Send"> 
+                    
+                 </div>
+             
+             </form>
+             
+        </div>
+         
+    </div>
+    </div>
+
+    
+	<%- include('partials/footerForStories'); -%>
+
+
+</body>
+
+	 <script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script>
+    $(document).ready(() => {
+      $('.button-collapse').sideNav();
+    });
+  </script>
+<script src ="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
+<script>
+    
+    
+    var input = document.getElementById('message');
+    var picker = new EmojiButton({
+        position:'bottom'
+    })
+    var emojiBtn = document.getElementById('emojiBtn');
+    picker.on('emoji',function(emoji){
+        input.value += emoji;
+    })
+    
+    emojiBtn.addEventListener('click',function(){
+        picker.pickerVisible ? picker.hidePicker() : picker.showPicker(input);
+    })
+    
+    
+    
+    
+    $(function(){
+        var socket = io.connect();
+        var $messageform = $('#messageForm');
+        var $message = $('#message');
+        var $chat = $('#chat');
+        var $messageArea= $('#messageArea');
+        var $userForm= $('#userForm');
+        var $users= $('#users');
+        var $username= $('#username');
+        var $userFormArea= $('#userFormArea');
+        
+        $messageform.submit(function(e){
+            e.preventDefault();
+            if($message.val()=="")
+                return;
+            socket.emit('send message',$message.val(),"<%= userDetails.image%>","<%= userDetails.name%>");
+            $message.val('');
+
+        })
+        
+        socket.on('new message',function(data){
+            
+            var msgSpace='&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            
+                    if(data.img == "<%= userDetails.image%>"
+                      )
+                  $chat.append('<div class="well" style="padding:5px;background:#eff;border:0px solid black;border-radius:10px;"><img src='+data.img+' height="30px" style="border-radius:50px;margin-right:10px;"><font style="font-size:12px;font-weight:bold;">'+data.name+'</font><br>'+msgSpace+data.msg+'</div>');
+            
+            
+            else{
+                 $chat.append('<div class="well" style="padding:5px;background:#eef;border:0px solid black;border-radius:10px;"><img src='+data.img+' height="30px" style="border-radius:50px;margin-right:10px;"><font style="font-size:12px;font-weight:bold;">'+data.name+'</font><br>'+msgSpace+data.msg+'</div>');
+            }
+            
+                  })
+        
+        
+            
+        socket.emit('new user',"<%= user%>",function(data){
+                if(data){
+                    alert('You are now live');
+                    $userFormArea.hide();
+                    $messageArea.show();
+                }
+            });
+       
+
+       
+        
+        
+       socket.on('get users',function(data){
+        var html='';
+        for(i=0;i<data.length;i++){
+            html+='<li class="list-group-item">'+data[i]+'</li>';
+        }
+        $users.html(html);
+    })
+    
+        
+    })
+    
+    
+    
+    </script>
+
+
+
+

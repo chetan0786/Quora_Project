@@ -5,8 +5,8 @@
       <a href="#" data-activates="main-menu" class="button-collapse show-on-large"><i style="font-size:24px" class="fa fa-lg fa-bars"></i></a>
            <ul class="left hide-on-small-only">
           <%if(user){%>
-        <li><a href="/stories"><i style="font-size:24px" class="fa fa-lg fa-home"></i></a></li>
-        <li><a href="/stories"><i style="font-size:24px" class="fa fa-lg fa-compass"></i></a></li>
+        <li><a href="/myhome"><i style="font-size:24px" class="fa fa-lg fa-home"></i></a></li>
+        <li><a href="/explore"><i style="font-size:24px" class="fa fa-lg fa-compass"></i></a></li>
           <%}%>
         </ul>
       <!-- RIGHT NAV -->
@@ -15,7 +15,7 @@
         
           <%if(user){%>
           <li><a href="/search"><i style="font-size:24px" class="fa fa-lg fa-search"></i></a></li>
-        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-coffee"></i></a></li>
+        <li><a href="/liveChatBox"><i style="font-size:24px" class="fa fa-lg fa-coffee"></i></a></li>
         <li><a href="/me"><i style="font-size:24px" class="fa fa-lg fa-user-circle-o"></i></a></li>
         
           <%}%>
@@ -38,22 +38,23 @@
         <li class="divider"></li>
         <li><a href="/stories"><i style="font-size:24px" class="fa fa-lg fa-book"></i> Public Stories</a></li>
         <li class="divider"></li>
-        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-rocket"></i> Activity</a></li>
-          <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-compass"></i> Explore</a></li>
+          <li><a href="/myhome"><i style="font-size:24px" class="fa fa-lg fa-home" ></i> Home</a></li>
+        
+          <li><a href="/explore"><i style="font-size:24px" class="fa fa-lg fa-compass"></i> Explore</a></li>
           <li><a href="/searchWriter"><i style="font-size:24px" class="fa fa-binoculars"></i> Search Writer</a></li>
-        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-home" ></i> Home</a></li>
-          <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-coffee" ></i> Live Chat Box</a></li>
+        
+          <li><a href="/liveChatBox"><i style="font-size:24px" class="fa fa-lg fa-coffee" ></i> Live Chat Box</a></li>
         <li><a href="/me"><i style="font-size:24px" class="fa fa-lg fa-user-circle-o" ></i> Me</a></li>
         <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-table"></i> Dashboard</a></li>
         <li><a href="/stories/my"><i style="font-size:24px" class="fa fa-lg fa-user"></i> My Stories</a></li>
         <li><a href="/add"><i style="font-size:24px" class="fa fa-lg fa-plus-square"></i> Add Stories</a></li>
-        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-bell"></i> Notifications</a></li>
-        <li><a href="/mailwriter"><i style="font-size:24px" class="fa fa-lg fa-envelope"></i> Mail Writer</a></li>
+        <li><a href="/storyRequests"><i style="font-size:24px" class="fa fa-lg fa-bell"></i> Story Requests </a></li>
+        <li><a href="/mailwriter"><i style="font-size:24px" class="fa fa-lg fa-envelope"></i> Write Fan Mail </a></li>
         <li><a href="/search"><i style="font-size:24px" class="fa fa-lg fa-search"></i> Find Hub</a></li>
-        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-globe"></i> Global Index</a></li>
-        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-line-chart"></i> Past Analysis</a></li>
         
-        <li><a href="/dashboard"><i style="font-size:24px" class="fa fa-lg fa-cog"></i> Settings</a></li>  
+        <li><a href="/analysis"><i style="font-size:24px" class="fa fa-lg fa-line-chart"></i> Past Analysis</a></li>
+        
+        <li><a href="/settings"><i style="font-size:24px" class="fa fa-lg fa-cog"></i> Settings</a></li>  
         <li><a href="/news"><i style="font-size:24px" class="fa fa-lg fa-newspaper-o" ></i> Latest News</a></li>
         <li><a href="/auth/logout"><i style="font-size:24px" class="fa fa-lg fa-sign-out"></i> Logout</a></li>
         <%}%>

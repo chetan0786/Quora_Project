@@ -28,14 +28,187 @@
               
          </div>
           </div>
+          
+          
+                 <style>
+       
+           .modal-bg1 {
+               position:fixed;
+               top:0;
+               left:0;
+               width:100%;
+               height:100vh;
+               background-color:rgba(0,0,0,0.5);
+               display:flex;
+               justify-content:center;
+               align-items:center;
+               visibility:hidden;
+               opacity:0;
+               transition: visibility 0s opacity 0.5s;
+           }
+           .modal-bg2 {
+               position:fixed;
+               top:0;
+               left:0;
+               width:100%;
+               height:100vh;
+               background-color:rgba(0,0,0,0.5);
+               display:flex;
+               justify-content:center;
+               align-items:center;
+               visibility:hidden;
+               opacity:0;
+               transition: visibility 0s opacity 0.5s;
+           }
+                      .modal-bg3 {
+               position:fixed;
+               top:0;
+               left:0;
+               width:100%;
+               height:100vh;
+               background-color:rgba(0,0,0,0.5);
+               display:flex;
+               justify-content:center;
+               align-items:center;
+               visibility:hidden;
+               opacity:0;
+               transition: visibility 0s opacity 0.5s;
+           }
+           
+           .bg-active{
+               visibility:visible;
+               opacity:1;
+           }
+           
+           .modal1{
+               padding:20px;
+               position:relative;
+               background-color:white;
+               width:300px;
+               
+               justify-content:space-around;
+               align-items:center;
+               
+           }
+                     .modal2{
+               padding:20px;
+               position:relative;
+               background-color:white;
+               width:300px;
+               
+               justify-content:space-around;
+               align-items:center;
+               
+           }
+                     
+                     
+                     .modal3{
+               padding:20px;
+               position:relative;
+               background-color:white;
+               width:300px;
+               
+               justify-content:space-around;
+               align-items:center;
+               
+           }
+       
+           .modal-close1{
+               position:absolute;
+               top:10px;
+               right:10px;
+               cursor:pointer;
+               font-weight:bold;
+           }
+           
+                     .modal-close2{
+               position:absolute;
+               top:10px;
+               right:10px;
+               cursor:pointer;
+               font-weight:bold;
+           }
+                     
+           
+                     
+      .modal-close3{
+               position:absolute;
+               top:10px;
+               right:10px;
+               cursor:pointer;
+               font-weight:bold;
+           }
+                                      
+       </style>
+       
+       
+       
+          
+          
           <div class="row">
           <div class="col s6 m6   followersClass" style="height:100%;border:1px solid black;text-align:center;font-weight:bold;cursor:pointer;">
           FOLLOWERS: <%= userDetails.followers.length%>
           </div>
-          <div class="col s6 m6" style="height:100%;border:1px solid black;text-align:center;font-weight:bold;cursor:pointer;">
+          <div class="col s6 m6 followingClass" style="height:100%;border:1px solid black;text-align:center;font-weight:bold;cursor:pointer;">
           FOLLOWING: <%= userDetails.following.length%>
           </div>
       
+              
+               <div class="modal-bg1">
+          
+                <div class="modal1 " >
+           <h5 class="center" style="display:block;"> Followers </h5>        
+                       <div class="" style="overflow-y: auto;height: 300px;">
+           
+            <% var j=0; userDetails.followers.forEach(function(element){j++;%>
+                        <hr>
+                           <a href="/gotoUserpage/<%=element.email%>">
+                                <div style="cursor:pointer;">
+                               <font style="color:black;"><%=j%></font>&nbsp; &nbsp;<font style="color:#039BE5"><%=element.name%></font><br>
+                           <p style="color:black"><%=element.email%></p>
+                                </div>
+                           </a>
+                        <%})%>    
+                            <hr>
+                         <%if(j==0){%>  
+                           None follows you...
+                           <%}%>
+                           </div>
+                    <div class="btn red align-center" style="display:block;">CLOSE</div>
+           <span class="modal-close1">X</span>
+                        
+           </div>
+
+       </div>
+              
+              <div class="modal-bg2">
+          
+                <div class="modal2 " >
+           <h5 class="center" style="display:block;"> Following </h5>        
+                       <div class="" style="overflow-y: auto;height: 300px;">
+           
+            <% var j=0; userDetails.following.forEach(function(element){j++;%>
+                        <hr>
+                          <a href="/gotoUserpage/<%=element.email%>">
+                                <div style="cursor:pointer;">
+                               <font style="color:black;"><%=j%></font>&nbsp; &nbsp;<font style="color:#039BE5"><%=element.name%></font><br>
+                           <p style="color:black"><%=element.email%></p>
+                                </div>
+                           </a>
+                        <%})%> 
+                                <hr>
+                         <%if(j==0){%>  
+                           Try to follow someone...
+                           <%}%>
+                           
+                      
+                           </div>
+                    <div class="btn red align-center" style="display:block;">CLOSE</div>
+           <span class="modal-close2">X</span>
+                        
+           </div>
+
+       </div>
           
           </div>
           
@@ -90,14 +263,67 @@
            <div class="row">
                
           <div class="col s6 m6" style="height:100%;text-align:center;">
-              <button class="btn red center" id=""  style="display:inline-block;margin:10px;"><i class="fa fa-lg fa-book"></i></button>
+              <button class="btn red center" onclick="loadByAjax()"  style="display:inline-block;margin:10px;"><i class="fa fa-lg fa-file"></i></button>
           </div>
                <div class="col s6 m6" style="height:100%;text-align:center;">
-              <button class="btn black center" id="" style="display:inline-block;margin:10px;"><i class="fa fa-lg fa-send"></i></button>
+              <button class="btn yellow center requestStoryClass" id="" style="display:inline-block;margin:10px;color:black"><i class="fa fa-lg fa-handshake-o"></i></button>
           </div>
           
           
+                   <div class="modal-bg3">
+          
+                <div class="modal3 " >
+           <h5 class="center" style="display:block;"> Request Another Part </h5> 
+                    <hr>
+                   
+                       <div class="" style="overflow-y: auto;height: 200px;">
+           
+                           <br>
+                            <div class="input-field">
+        <select name="story" id="storyForRequest" required>
+          
+             <%userStories.forEach(function(element){%>
+    
+                    <option  value="<%= element._id%>"><%= element.title%></option>
+            <%});%>
+          
+        </select>
+        <label for="story" style="font-size:14px;font-weight:bold;">Select story : </label>
+      </div>
+                   
+                      
+                           </div>
+                    
+                    
+                     <label>**You may send requests any number of times you want. However, author may or may not accept your request.You will receive a mail from our side if your request gets accepted.</label>
+                    <hr>
+                    <div class="btn yellow align-center" style="display:block;color:black;">SEND REQUEST</div>
+           <span class="modal-close3">X</span>
+                        
+           </div>
+
+       </div>
+               
+               
           </div>
+          
+          
+          
+          
+     
+      
+      <h4>Users Original</h4>
+       <%- include ('./stories/functions') -%> 
+<div class="row myStoriesContent">
+    
+    
+<!-- STORY Will be displayed here-->
+  
+  
+</div>
+ 
+           
+          
           
       
   </div>
@@ -165,7 +391,7 @@
   <script>
     $(document).ready(() => {
       $('.button-collapse').sideNav();
-        
+          $('select').material_select();
     });
       
       
@@ -186,7 +412,7 @@
                                  }
                  },
           success: function(response_data){
-              
+              location.reload();
           $('.followersClass').html('FOLLOWERS: '+response_data.length)
               }
           }
@@ -249,6 +475,143 @@
               );
           }
       
+          
+          
+          
+          
+          
+          
+          
+          
+          
+           $(document).on('click','.followersClass',function(){
+          
+          var d=$(this).parent()[0].children[2];
+               
+         
+          doit(d);
+               //change children 8
+          d.children[0].children[3].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+           });
+               d.children[0].children[2].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+           });
+          
+      });
+          
+          
+           $(document).on('click','.followingClass',function(){
+          
+          var d=$(this).parent()[0].children[3];
+               
+         
+          doit(d);
+               //change children 8
+          d.children[0].children[3].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+           });
+               d.children[0].children[2].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+           });
+          
+      });
+    
+    
+      
+       $(document).on('click','.requestStoryClass',function(){
+          
+          var d=$(this).parent().parent()[0].children[2];
+               
+           console.log(d)
+//         
+          doit(d);
+               //change children 8
+          d.children[0].children[5].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+              var storyId=document.getElementById('storyForRequest').value;
+              var name=$( "#storyForRequest option:selected" ).text();
+              
+              
+              $.ajax({
+                type: "POST",
+                url: "/notify",
+                data:  { receiverData: {name : "<%=userDetails.name%>",
+                                email: "<%= userDetails.email%>" 
+                                 },
+                        story:storyId,
+                        storyName:name,
+                        type:"REQUEST"
+                       },
+                success: function(response_data){
+                       console.log(response_data)
+                       alert('Request has been sent');
+                    location.reload();
+                    }
+                }
+              );
+              
+
+           });
+               d.children[0].children[6].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+           });
+          
+      });
+      
+    
+    function doit(mm){
+
+               mm.classList.add('bg-active');
+        
+           }
+          
+          
+          loadByAjax();
+      
+      
+          
+      function loadByAjax()
+{
+    
+
+        $('.myStoriesContent').html('');
+    
+
+     $.ajax({
+          type: "POST",
+          url: "/getUserStories",
+          data:  { useremail: "<%= userDetails.email%>" 
+                 },
+          success: function(response_data){
+                
+              var data_str = JSON.stringify(response_data);
+              var ele = JSON.parse(data_str)
+             
+                  for (element of ele){
+          $('.myStoriesContent').append('<div class="col s12 m4"><div class="card" style="position:inherit;">        <div class="card-content center-align"><h6>'+element.title+'</h6><br><div class="chip"><img src=" '+element.author.image+'">'+element.author.name+'</div></div><div class="card-action center-align" style="position:inherit;">          <a class="btn grey" href="/stories/show/'+element._id+'">Read </a></div></div></div></div>')
+              }
+              
+          }
+          });
+}
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+          
   </script>
 
 

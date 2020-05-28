@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Storybooks</title>
+</head>
+<body>
+	
+	<%- include('partials/header'); -%>
+
+          <div class="row " style="">
+            <div class="col s0 m2"></div>
+  <div class="col s12 m8">
+    <div class="card ">
+      <div class="card-content center" style="padding : 5px;">
+      
+      <h4 style="font-family: cursive;"> Explore writers </h4>
+    
+  </div>
+   </div>
+            </div>
+            <div class="col s0 m2  ">
+            </div>
+</div>
+           
+    
+    
+    <div class="row">
+        <div class="col s0 m2"></div>
+             
+    <div class="col s12 m8">
+   
+         <div class="row">
+    <%users.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)); users.forEach(function(element){%>
+    <a href="/gotoUserpage/<%= element.email%>">
+    <div class="col s12 m4 " id="user<%= element._id%>" style="background:antiquewhite;">
+      <div class="card" id="img<%= element._id%>" style="background-image: url('<%= element.image%>'); background-position: center; height:300px;background-size: auto;" >
+        
+        <div class="card-content center-align" id="userinfo<%= element._id%>" style="display:none;">
+          <h5 style="background-color:rgba(255,255,255,0.6);color:black;"><%=element.name%></h5>
+
+          <br>
+          <div class="chip" style="background:#eee;">
+            <%=element.email%>
+          </div>
+            <br><br><br><br>
+            <h6 style="background-color:rgba(255,255,255,0.6);color:black;"><font style="color:black;font-weight:bold;font-size:12px">ABOUT: </font><%= element.about%></h6>
+            
+        </div>
+        
+      </div>
+    </div>
+             </a>       
+             <script>
+                 $("#user<%= element._id%>"
+                  ).hover(function(){
+    $(this).css("background-color", "rgba(0,0,0,0.5)");
+                   
+                  
+           $('#userinfo<%= element._id%>').show();         
+    }, function(){
+    $(this).css("background-color", "antiquewhite");
+               $('#userinfo<%= element._id%>').hide();
+                  
+  });
+             
+             </script>
+             
+  
+  <%});%>
+</div>
+        
+        
+        
+    </div>
+        
+        
+        <div class="col s0 m2"></div>
+    </div>
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+	<%- include('partials/footerForStories'); -%>
+
+
+</body>
+
+	 <script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script>
+    $(document).ready(() => {
+      $('.button-collapse').sideNav();
+    });
+      
+      
+      
+   
+      
+      
+  </script>
+
+
+

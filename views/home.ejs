@@ -5,15 +5,243 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
     <title>Storybooks</title>
 </head>
 <body>
 	
 	<%- include('partials/header'); -%>
 
-	<%- include('partials/footer'); -%>
+    
+    
+       
+             <div class="row " style="">
+            <div class="col s0 m2"></div>
+  <div class="col s12 m8">
+    <div class="card ">
+      <div class="card-content center" style="padding : 5px;">
+      
+      <h4 style="font-family: cursive;"> Home </h4>
+    
+  </div>
+   </div>
+            </div>
+            <div class="col s0 m2  ">
+            </div>
+</div>
+           
 
+    
+    <div class="row">
+        <div class="col s0 m2"></div>
+        <div class="col s12 m8">
+    <%var i=0;
+            stories.sort(function(a,b){
+  
+  return new Date(b.date) - new Date(a.date);
+});
+            
+            
+            stories.forEach(function(element){i++; const index = userDetails.following.findIndex(function(followedUser){
+                            return followedUser.email==element.userid;
+                        });
+                if(index>-1){%>
+    <div class="together">
+    <div class="col s12 m6" style="background: lemonchiffon;
+    padding: 20px;margin-bottom:10px;">
+      <div class="card" style="position:inherit">
+         
+        <div class="card-content center-align">
+          <h6><%=element.title%></h6>
+          <br>
+          <div class="chip">
+              
+            <img src=" <%=element.author.image%>">
+              
+            <%=element.username%>
+          </div>
+        </div>
+        <div class="card-action center-align" style="position:inherit">
+          <a class="btn grey" href="/stories/show/<%=element._id%>">Read</a>
+        </div>
+          
+          
+          
+          <div class="left " id="totalLikes<%= element._id%>" >
+         <button class="btn  white" id="_likedStories"style="color:black;font-style:bold;width:100%;padding-left:15px;padding-right:15px;"><i style="font-size:24px;color:red;" class="fa fa-lg fa-heart"></i> <%= element.likedBy.length%></button>
+       
+        </div>
+      
+      
+      
+         <div class="right" style="align-items:right;" >
+         <button class="btn 
+                        <% if(element.likedBy.includes(useremail)){ %>
+                        pink
+                        <%}else{%>
+                        grey
+                        <%}%>
+                        
+                        
+                        " id="_likeBtn<%= element._id%>" onclick="likeProcess('<%= element._id%>')" style="padding-left:15px;padding-right:15px;"><i style="font-size:24px" class="fa fa-lg fa-heart"></i></button>
+               <button class="btn  green" id="_commentBtn<%=element._id%>" onclick="loadComments('<%=element._id%>')" style="padding-left:15px;padding-right:15px;"><i style="font-size:24px" class="fa fa-lg fa-comments"></i></button>
+         <button class="btn  blue" id="_shareBtn<%=element._id%>"  onclick="shareStory('<%=element._id%>')" style="padding-left:15px;padding-right:15px;"><i style="font-size:24px" class="fa fa-lg fa-send"></i></button>
+        </div>   
+          
+      </div>        
+    </div>
+  
+            
+             <div class="modal-bg1">
+          
+                <div class="modal1 ">
+                    <form action="/mail/<%= element._id%>?_method=PUT" method="post" class="col s12">
+                        <input type="hidden" name="_method" value="PUT">
+           <h4>Mail <%=element.title%></h4>
+            <label for="email">Email To:</label>
+           <input type="email" id="toemail" name ="email" required>
+              <label for="name">Subject :</label>
+           <input type="text" id="subject" name="subject" required>
+                        <button type="submit" class="btn blue" value="mail">SHARE</button>
+           <input type="text" name="story" value="<%=element.body%>" hidden>
+                        
+           <span class="modal-close1">X</span>
+                        </form>
+           </div>
 
+       </div>
+        
+        
+        
+         <div class="modal-bg2">
+          
+                <div class="modal2 " >
+           <h5 class="center" style="display:block;"> All Comments </h5>        
+                       <div class="" style="overflow-y: auto;height: 300px;">
+           
+            <% var j=0; element.comments.forEach(function(element){%>
+                        <hr>
+                          <a href="/gotoUserpage/<%=element.commentUser.email%>">
+                                <div style="cursor:pointer;">
+                               <font style="color:black;">>></font>&nbsp; &nbsp;<font style="color:#039BE5"><%=element.commentUser.name%></font><br>
+                           <p style="color:black;margin:0px;"><%=element.commentBody%></p>
+                                </div>
+                           </a>
+                        <%;j=1;})%> 
+                                <hr>
+                         <%if(j==0){%>  
+                           Either comments are disabled or none have commented...
+                           <%}%>
+                           
+                      
+                           </div>
+                    <div class="btn green align-center" style="display:block;">CLOSE</div>           
+                        
+           </div>
+
+       </div>
+        
+  
+            </div>  
+  <%}}); if(i==0){%>
+        <div class="col s12 m4 center">
+        <p>Kindly follow some one to view...</p>
+        </div>
+        <%}%>
+</div>
+        </div>
+    
+     
+       
+       
+          
+      
+       
+       
+        
+        
+    
+    <%- include('./partials/footerForStories'); -%>
+     <style>
+       
+         
+         .modal-bg2 {
+               position:fixed;
+               top:0;
+               left:0;
+               width:100%;
+               height:100vh;
+               background-color:rgba(0,0,0,0.5);
+               
+               display:flex;
+               justify-content:center;
+               align-items:center;
+               visibility:hidden;
+               opacity:0;
+               transition: visibility 0s opacity 0.5s;
+           }
+           .modal-bg1 {
+               position:fixed;
+               top:0;
+               left:0;
+               width:100%;
+               height:100vh;
+               background-color:rgba(0,0,0,0.5);
+               
+               display:flex;
+               justify-content:center;
+               align-items:center;
+               visibility:hidden;
+               opacity:0;
+               transition: visibility 0s opacity 0.5s;
+           }
+           
+           .bg-active{
+               visibility:visible;
+               opacity:1;
+           }
+         
+           .modal2{
+               padding:20px;
+               position:relative;
+               background-color:white;
+               width:300px;
+               
+               justify-content:space-around;
+               align-items:center;
+               
+           }
+         
+           .modal1{
+               padding:20px;
+               position:relative;
+               background-color:white;
+               width:300px;
+               display:flex;
+               justify-content:space-around;
+               align-items:center;
+               flex-direction:column;
+           }
+       
+           .modal-close1{
+               position:absolute;
+               top:10px;
+               right:10px;
+               cursor:pointer;
+               font-weight:bold;
+           }
+           
+           .modal1 h4{
+               font-size:25px;
+           }
+           .modal1 label{
+               font-size:1rem;
+           }
+           .modal1 input{
+               background-color:antiquewhite;
+           }
+       </style>
 </body>
 
 	 <script
@@ -26,6 +254,79 @@
     $(document).ready(() => {
       $('.button-collapse').sideNav();
     });
+      
+      
+      
+      
+      
+      
+      
+      function likeProcess(storyid){
+        
+          console.log(storyid);
+          
+          
+          var likeBtn = '_likeBtn'+storyid;
+          
+        if(document.getElementById(likeBtn).classList.contains('grey'))
+            document.getElementById(likeBtn).classList.replace('grey','pink')
+       else if(document.getElementById(likeBtn).classList.contains('pink'))
+            document.getElementById(likeBtn).classList.replace('pink','grey')
+        
+        
+         $.ajax({
+          type: "POST",
+          url: "/likeStory",
+          data:  { like: document.getElementById(likeBtn).classList.contains('pink'),
+                   storyId: storyid
+                 },
+          success: function(response_data){
+              
+          $('#totalLikes'+storyid).html('<button class="btn  white" id="_likedStories"style="color:black;font-style:bold;padding-left:15px;padding-right:15px;"><i style="font-size:24px;color:red;" class="fa fa-lg fa-heart"></i> '+response_data+'</button>')
+              }
+          }
+          );
+        
+        
+    }
+      
+      
+      
+      
+      
+      
+      function shareStory(storyId){
+//          console.log(storyId);
+        var d=document.getElementById("_shareBtn"+storyId).parentNode.parentNode.parentNode.parentNode.childNodes[3];
+//           console.log(d)
+          doit(d);
+          d.children[0].children[0].children[8].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+           });  
+      }
+      
+       function loadComments(storyId){
+//          console.log(storyId);
+        var d=document.getElementById("_commentBtn"+storyId).parentNode.parentNode.parentNode.parentNode.childNodes[5];
+           console.log(d)
+          doit(d);
+           d.children[0].children[2].addEventListener('click',function(){
+            d.classList.remove('bg-active');
+           });
+      }
+      
+           
+    
+    
+    function doit(mm){
+
+               mm.classList.add('bg-active');
+        
+           }
+      
+      
+      
+      
   </script>
 
 
