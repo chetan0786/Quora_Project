@@ -113,6 +113,7 @@ var globalSchema = new mongoose.Schema({
     storyname:String,
     authorname:String,
     authorid:String,
+    authorimage:String,
     storyid:mongoose.Schema.Types.ObjectId,
     date:Date
 })
@@ -1117,6 +1118,7 @@ app.post('/addingstory', (req, res) => {
                     const gb={
                         storyname:story.title,
                         authorname:story.author.name,
+                        authorimage:storyAuthor.image,
                         authorid:req.session.email,
                         storyid:story._id,
                         date:Date.now()
