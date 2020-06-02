@@ -40,24 +40,24 @@
 
 
 
-    fetch('https://cors-anywhere.herokuapp.com/http://newsapi.org/v2/top-headlines?country=in&apiKey=e873e44ea64140bab36c382198813b1c')
+    fetch('https://api.currentsapi.services/v1/latest-news?country=IN&apiKey=A0qO7zJO9PVYIjx6lR75Zl31fwr9XaaWWDltSKvPOCaXf50t')
     .then(response=> response.json())
     .then((data)=>
     {
-      var d=data.articles;
-
+      var d=data.news;
+      console.log(d);
       var add=document.getElementById('addhere');
 
       d.map((value,index)=>
       {
-        if(value.urlToImage)
+        if(value.image!="None")
         {
         var card=document.createElement('div');
         card.setAttribute('class','card mx-auto mt-3 ml-5');
          card.setAttribute('style','width:400px');
          var img=document.createElement('img');
          img.setAttribute('class','card-img-top');
-         img.setAttribute('src',value.urlToImage);
+         img.setAttribute('src',value.image);
          img.setAttribute('style','width:100%');
          card.appendChild(img);
 
