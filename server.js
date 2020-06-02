@@ -109,8 +109,18 @@ var membersSchema = new mongoose.Schema({
 
 })
 
+var globalSchema = new mongoose.Schema({
+    storyname:String,
+    authorname:String,
+    authorid:String,
+    storyid:mongoose.Schema.Types.ObjectId,
+    date:Date
+})
+
 
 var members = mongoose.model('members', membersSchema);
+
+var globals=mongoose.model('globals',globalSchema);
 
 var storySchema = new mongoose.Schema({
     title: String,
@@ -1104,8 +1114,20 @@ app.post('/addingstory', (req, res) => {
                 .then(story => {
                     console.log(story);
 
-                    sendmsg(story.title+" Has Been Added By "+story.author.name+".");
+                    const gb={
+                        storyname:story.title,
+                        authorname:story.author.name,
+                        authorid:req.session.email,
+                        storyid:story._id,
+                        date:Date.now()
+                    }
+
+                    new globals(gb).save()
+                    .then(data=>{
+                        sendmsg(story.title+" Has Been Added By "+story.author.name+".");
                     res.redirect('/dashboard')
+                    })
+                    
 
                 })
 
@@ -1516,6 +1538,21 @@ app.get('/storyRequests', middleFunctionUser, (req, res) => {
 
 
 
+})
+
+app.get('/globe',middleFunctionUser,(req,res)=>
+{
+    globals.find({
+
+    }).then(data=>{
+        console.log(data);
+        res.render('global',{
+            alldata:data,
+            user:req.session.email,
+            count:0
+        })
+
+    })
 })
 
 
