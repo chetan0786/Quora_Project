@@ -808,7 +808,7 @@ app.post('/mailuser', (req, res) => {
         from: 'contact.writingdesk@gmail.com',
         to: req.body.email,
         subject: req.body.subject,
-        html: req.body.msg
+        html: req.body.text
     };
 
     transporter.sendMail(mailOptions, function(error, info) {
