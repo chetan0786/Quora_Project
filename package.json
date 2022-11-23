@@ -16,7 +16,7 @@
     "passport-google-oauth": "^2.0.0",
     "path": "^0.12.7",
     "push.js": "^1.0.12",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.5.0"
   },
   "devDependencies": {},
   "scripts": {
